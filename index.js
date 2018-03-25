@@ -10,57 +10,123 @@ document.body.appendChild(renderer.domElement);
 var geomTile = new THREE.BufferGeometry();
 
 //vertices for tile (20x20 miles) (todo: move this to Tile)
-var vertsTile = new Float32Array( [
-	-52000.0, -52000.0,  1.0,
-	 52000.0, -52000.0,  1.0,
-	 52000.0,  52000.0,  1.0,
-	-52000.0,  52000.0,  1.0,
-	-52000.0, -52000.0,  1.0
-] );
+var vertsTile = new Float32Array([
+  -52000.0, -52000.0, 1.0,
+  52000.0, -52000.0, 1.0,
+  52000.0, 52000.0, 1.0,
+  -52000.0, 52000.0, 1.0,
+  -52000.0, -52000.0, 1.0
+]);
+
+var vertsGrid32 = new Float32Array([
+  -52000.0, -0, 1.0,
+  52000.0, 0, 1.0,
+  ]);
+
 
 // add tile vertices to geomTile buffer (this buffer (geomTile) will be consumed by THREE.Line
 // so that it can be added as a line to the 3js Three.Scene object (scene))
-geomTile.addAttribute( 'position', new THREE.BufferAttribute( vertsTile, 3 ) );
+geomTile.addAttribute('position', new THREE.BufferAttribute(vertsTile, 3));
 
 // road matRoad
-var matRoad = new THREE.LineBasicMaterial( {
-	color: 0x00ffff,
-	linewidth: 3
-	// linecap: 'round', //ignored by WebGLRenderer
-	// linejoin:  'round' //ignored by WebGLRenderer
-} );
+var matRoad = new THREE.LineBasicMaterial({
+  color: 0x00ffff,
+  linewidth: 3
+  // linecap: 'round', //ignored by WebGLRenderer
+  // linejoin:  'round' //ignored by WebGLRenderer
+});
 
 //feed the tile geometry, as a line, to the 3js scen object
-var lineTile = new THREE.Line( geomTile, matRoad );
+var lineTile = new THREE.Line(geomTile, matRoad);
 scene.add(lineTile)
 
 //test: build road here
 let road = new Road()
-let segs = 10;
-for(let i=0; i < segs; i++) {
-  road.addSeg()
+// road.addSeg()
+// road.addSeg()
+// road.addSeg()
+
+/*
+let segmentToOrigin = this.translateSegToOrigin(startPt, endPt)
+let degrees = 15
+
+determine bend in road
+let rotatedEndPt = this.determineBend(segmentToOrigin.endPt)
+
+let rotatedEndPt = segmentToOrigin.endPt
+let rotatedEndPt = this.rotateAboutOrigin(segmentToOrigin.endPt, degrees)
+
+put endPt back into world space
+rotatedEndPt is point to translate, startPt is offset by which to translate rotatedEndPt
+let translatedEndPt = this.translatePtToWorld(rotatedEndPt, startPt)
+
+add transformed end point to vertsRoad
+this.vertsRoad.push(translatedEndPt.x)
+this.vertsRoad.push(translatedEndPt.y)
+this.vertsRoad.push(translatedEndPt.z)
+*/
+
+let segs = 1500
+let newRoadSeg
+let transformedRoadSeg
+
+for (let i = 0; i < segs; i++) {
+  newRoadSeg = road.getNewRoadSeg()
+  road.addSeg(newRoadSeg)
 }
+
+// road.vertsRoad.push(0)
+// road.vertsRoad.push(-52000)
+// road.vertsRoad.push(0)
+//
+// road.vertsRoad.push(0)
+// road.vertsRoad.push(-51900)
+// road.vertsRoad.push(0)
+//
+// road.vertsRoad.push(0)
+// road.vertsRoad.push(-51900)
+// road.vertsRoad.push(0)
+//
+// road.vertsRoad.push(100)
+// road.vertsRoad.push(-51600)
+// road.vertsRoad.push(0)
+
+// road.addSeg({endPt: {x: 0, y: -51900, z: 0}, startPt: {x: 0, y: -52000, z: 0}})
+// road.addSeg({endPt: {x: 0, y: -51900, z: 0}, startPt: {x: 100, y: -50800, z: 0}})
+
 let vertsRoad = road.getRoad()
-console.log("vertsRoad: ", vertsRoad)
 
 //put road vets in a typed array for 3js to consumed
-let vertsRoad32 = new Float32Array( vertsRoad );
-for(let i=0; i <= vertsRoad32.length; i++) {
-  console.log("vert: ", vertsRoad32[i+0],vertsRoad32[i+1],vertsRoad32[i+2] )
-  i+=2;
-}
+let vertsRoad32 = new Float32Array(vertsRoad);
 
 var geomRoad = new THREE.BufferGeometry();
-geomRoad.addAttribute( 'position', new THREE.BufferAttribute( vertsRoad32, 3 ) );
+geomRoad.addAttribute('position', new THREE.BufferAttribute(vertsRoad32, 3));
 let lineRoad = new THREE.Line(geomRoad, matRoad)
 scene.add(lineRoad)
+console.log(road.totalSegs)
+
+var geomGrid = new THREE.BufferGeometry();
+geomGrid.addAttribute('position', new THREE.BufferAttribute(vertsGrid32, 3));
+let lineGrid = new THREE.Line(geomGrid, matRoad)
+scene.add(lineGrid)
+
 
 //establish camera location and camera target
 let deg = 0.0174533
+// camera.position.x = 0;
+// camera.position.y = -52000; //-104000;
+// camera.position.z = 500;
+
 camera.position.x = 0;
-camera.position.y = 0; //-104000;
+camera.position.y = 0; // -52000 / 2; //-104000;
 camera.position.z = 150000;
-camera.rotateX(deg*0)
+
+// camera.position.x = 0;
+// camera.position.y = -52000; // -52000 / 2; //-104000;
+// camera.position.z = 800;
+
+
+camera.rotateX(deg * 0)
 // camera.lookAt( new THREE.Vector3( 0, 1, 10000 ) );
 // camera.lookAt( new THREE.Vector3( 0, 0, 10 ) );
 
