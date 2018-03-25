@@ -280,17 +280,20 @@ class Road {
   }
 
   rotateAboutOrigin(endPt, degrees) {
+    let radDegrees = 0.0174533 * degrees;
+
     let x = endPt.x * Math.cos(radDegrees) - endPt.y * Math.sin(radDegrees)
     let y = endPt.x * Math.sin(radDegrees) + endPt.y * Math.cos(radDegrees)
+
     return {x: x, y: y}
   }
 
   rotateRoadSegAboutOrigin(endPt, degrees) {
 
-    let radDegrees = 0.0174533 * degrees;
+
 
     // if(Math.asin(endPt.x)... finish this
-    let pt = rotateAboutOrigin(endPt, degrees)
+    let pt = this.rotateAboutOrigin(endPt, degrees)
     let x = pt.x //endPt.x * Math.cos(radDegrees) - endPt.y * Math.sin(radDegrees)
     let y = pt.y //endPt.x * Math.sin(radDegrees) + endPt.y * Math.cos(radDegrees)
     let z = 0

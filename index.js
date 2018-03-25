@@ -94,11 +94,37 @@ road.vertsRoad.push(0)
 
 let newSegEndPt = road.getUnitVector({startPt: {x: 0, y: -51900, z: 0}, endPt: {x: 5, y: -51897, z: 0}})
 console.log(newSegEndPt)
-//first arg is point to translate, startPt is offset by which to translate first arg)
-let newSegToOrigin = road.translateSegToOrigin( newSegEndPt ,{x: 5, y: -51897, z: 0})
-console.log(newSegToOrigin)
 
-let rotatedNewSegEndPt = road.rot
+//first arg is point to translate, startPt is offset by which to translate first arg)
+// newSegEndPt ,{x: 5, y: -51897, z: 0}
+let newSegToWorld = road.translatePtToWorld({x: newSegEndPt.x, y: newSegEndPt.y, z: 0}, {x: 5, y: -51897, z: 0})
+
+
+road.vertsRoad.push(5)
+road.vertsRoad.push(-51897-1)
+road.vertsRoad.push(0)
+
+road.vertsRoad.push(newSegToWorld.x)
+road.vertsRoad.push(newSegToWorld.y-1)
+road.vertsRoad.push(0)
+
+
+// let newSegToOrigin = road.translateSegToOrigin({x: 0, y: -51900, z: 0},newSegEndPt)
+// console.log(newSegToOrigin)
+//
+// let rotatedNewSegEndPt = road.rotateAboutOrigin(newSegToOrigin.endPt, 90)
+// console.log(rotatedNewSegEndPt)
+//
+// //first arg is point to translate, startPt is offset by which to translate first arg)
+// // newSegEndPt ,{x: 5, y: -51897, z: 0}
+// let newSegToWorld = road.translatePtToWorld(rotatedNewSegEndPt, {x: 5, y: -51897, z: 0})
+// road.vertsRoad.push(5)
+// road.vertsRoad.push(-51897)
+// road.vertsRoad.push(0)
+//
+// road.vertsRoad.push(newSegToWorld.x)
+// road.vertsRoad.push(newSegToWorld.y)
+// road.vertsRoad.push(0)
 
 
 
