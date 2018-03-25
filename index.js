@@ -87,14 +87,27 @@ road.vertsRoad.push(0)
 road.vertsRoad.push(-51900)
 road.vertsRoad.push(0)
 
-road.vertsRoad.push(100)
-road.vertsRoad.push(-51600)
+road.vertsRoad.push(5)
+road.vertsRoad.push(-51897)
 road.vertsRoad.push(0)
+
+
+let newSegEndPt = road.getUnitVector({startPt: {x: 0, y: -51900, z: 0}, endPt: {x: 5, y: -51897, z: 0}})
+console.log(newSegEndPt)
+//first arg is point to translate, startPt is offset by which to translate first arg)
+let newSegToOrigin = road.translateSegToOrigin( newSegEndPt ,{x: 5, y: -51897, z: 0})
+console.log(newSegToOrigin)
+
+let rotatedNewSegEndPt = road.rot
+
+
 
 // road.addSeg({endPt: {x: 0, y: -51900, z: 0}, startPt: {x: 0, y: -52000, z: 0}})
 // road.addSeg({endPt: {x: 0, y: -51900, z: 0}, startPt: {x: 100, y: -50800, z: 0}})
 
+
 let vertsRoad = road.getRoad()
+
 
 //put road vets in a typed array for 3js to consumed
 let vertsRoad32 = new Float32Array(vertsRoad);
@@ -122,8 +135,8 @@ let deg = 0.0174533
 // camera.position.z = 150000;
 
 camera.position.x = 0;
-camera.position.y = -52000; // -52000 / 2; //-104000;
-camera.position.z = 800;
+camera.position.y = -51900; // -52000 / 2; //-104000;
+camera.position.z = 10;
 
 
 camera.rotateX(deg * 0)

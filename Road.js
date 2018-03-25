@@ -32,8 +32,8 @@ class Road {
     this.roadSegLength = 100
 
     //seed first road segment (start pt and end pt of first segment)
-    // this.vertsRoad = [0, -this.roadSeedX, 0, 0, -this.roadSeedX + this.roadSegLength, 0]
-    this.vertsRoad = []
+    this.vertsRoad = [0, -this.roadSeedX, 0, 0, -this.roadSeedX + this.roadSegLength, 0]
+    // this.vertsRoad = []
 
     // this.vertsRoad = [spawnSeg.startPt.x,]
     this.segmentsAddedSinceLastTurn = 0
@@ -196,14 +196,14 @@ class Road {
     this.degrees= 5
 
     if(Math.random() > 0.75) {
-      return this.rotateAboutOrigin(currentRdEndPtRelativeToOrigin, this.degrees * this.mult)
+      return this.rotateRoadSegAboutOrigin(currentRdEndPtRelativeToOrigin, this.degrees * this.mult)
     } else {
       // console.log('str')
       return currentRdEndPtRelativeToOrigin
     }
-    // return this.rotateAboutOrigin(currentRdEndPtRelativeToOrigin, this.degrees * this.mult)
+    // return this.rotateRoadSegAboutOrigin(currentRdEndPtRelativeToOrigin, this.degrees * this.mult)
 
-    // return this.rotateAboutOrigin(currentRdEndPtRelativeToOrigin, this.degrees * this.mult)
+    // return this.rotateRoadSegAboutOrigin(currentRdEndPtRelativeToOrigin, this.degrees * this.mult)
     // console.log("this.totalSegs ", this.totalSegs)
     //return an end point that is either rotated or not rotated
     //based on road generation-randomization rules
@@ -237,7 +237,7 @@ class Road {
     // this.mult = this.mult * -1
     // console.log("turn", this.mult)
     // console.log(currentRdEndPtRelativeToOrigin)
-    // let result =  this.rotateAboutOrigin(currentRdEndPtRelativeToOrigin, 45 * this.mult)
+    // let result =  this.rotateRoadSegAboutOrigin(currentRdEndPtRelativeToOrigin, 45 * this.mult)
     // console.log("result",result)
     // return result;
 
@@ -278,17 +278,25 @@ class Road {
       z: z
     }
   }
+
   rotateAboutOrigin(endPt, degrees) {
+    let x = endPt.x * Math.cos(radDegrees) - endPt.y * Math.sin(radDegrees)
+    let y = endPt.x * Math.sin(radDegrees) + endPt.y * Math.cos(radDegrees)
+    return {x: x, y: y}
+  }
+
+  rotateRoadSegAboutOrigin(endPt, degrees) {
 
     let radDegrees = 0.0174533 * degrees;
 
     // if(Math.asin(endPt.x)... finish this
-    let x = endPt.x * Math.cos(radDegrees) - endPt.y * Math.sin(radDegrees)
-    let y = endPt.x * Math.sin(radDegrees) + endPt.y * Math.cos(radDegrees)
+    let pt = rotateAboutOrigin(endPt, degrees)
+    let x = pt.x //endPt.x * Math.cos(radDegrees) - endPt.y * Math.sin(radDegrees)
+    let y = pt.y //endPt.x * Math.sin(radDegrees) + endPt.y * Math.cos(radDegrees)
     let z = 0
     // console.log("--- x", x/this.roadSegLength)
     // console.log("--- y", y/this.roadSegLength)
-    // console.log("from rotateAboutOrigin: x", Math.abs(Math.asin(x/this.roadSegLength)), this.turnThresh)
+    // console.log("from rotateRoadSegAboutOrigin: x", Math.abs(Math.asin(x/this.roadSegLength)), this.turnThresh)
     if ((y/this.roadSegLength > 0) && Math.abs(Math.asin(x/this.roadSegLength)) < this.turnThresh) {
       // console.log("happens1")
       return {
