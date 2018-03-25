@@ -70,26 +70,26 @@ let segs = 1500
 let newRoadSeg
 let transformedRoadSeg
 
-for (let i = 0; i < segs; i++) {
-  newRoadSeg = road.getNewRoadSeg()
-  road.addSeg(newRoadSeg)
-}
+// for (let i = 0; i < segs; i++) {
+//   newRoadSeg = road.getNewRoadSeg()
+//   road.addSeg(newRoadSeg)
+// }
 
-// road.vertsRoad.push(0)
-// road.vertsRoad.push(-52000)
-// road.vertsRoad.push(0)
-//
-// road.vertsRoad.push(0)
-// road.vertsRoad.push(-51900)
-// road.vertsRoad.push(0)
-//
-// road.vertsRoad.push(0)
-// road.vertsRoad.push(-51900)
-// road.vertsRoad.push(0)
-//
-// road.vertsRoad.push(100)
-// road.vertsRoad.push(-51600)
-// road.vertsRoad.push(0)
+road.vertsRoad.push(0)
+road.vertsRoad.push(-52000)
+road.vertsRoad.push(0)
+
+road.vertsRoad.push(0)
+road.vertsRoad.push(-51900)
+road.vertsRoad.push(0)
+
+road.vertsRoad.push(0)
+road.vertsRoad.push(-51900)
+road.vertsRoad.push(0)
+
+road.vertsRoad.push(100)
+road.vertsRoad.push(-51600)
+road.vertsRoad.push(0)
 
 // road.addSeg({endPt: {x: 0, y: -51900, z: 0}, startPt: {x: 0, y: -52000, z: 0}})
 // road.addSeg({endPt: {x: 0, y: -51900, z: 0}, startPt: {x: 100, y: -50800, z: 0}})
@@ -117,13 +117,13 @@ let deg = 0.0174533
 // camera.position.y = -52000; //-104000;
 // camera.position.z = 500;
 
-camera.position.x = 0;
-camera.position.y = 0; // -52000 / 2; //-104000;
-camera.position.z = 150000;
-
 // camera.position.x = 0;
-// camera.position.y = -52000; // -52000 / 2; //-104000;
-// camera.position.z = 800;
+// camera.position.y = 0; // -52000 / 2; //-104000;
+// camera.position.z = 150000;
+
+camera.position.x = 0;
+camera.position.y = -52000; // -52000 / 2; //-104000;
+camera.position.z = 800;
 
 
 camera.rotateX(deg * 0)

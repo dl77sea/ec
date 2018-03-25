@@ -32,8 +32,8 @@ class Road {
     this.roadSegLength = 100
 
     //seed first road segment (start pt and end pt of first segment)
-    this.vertsRoad = [0, -this.roadSeedX, 0, 0, -this.roadSeedX + this.roadSegLength, 0]
-    // this.vertsRoad = []
+    // this.vertsRoad = [0, -this.roadSeedX, 0, 0, -this.roadSeedX + this.roadSegLength, 0]
+    this.vertsRoad = []
 
     // this.vertsRoad = [spawnSeg.startPt.x,]
     this.segmentsAddedSinceLastTurn = 0
