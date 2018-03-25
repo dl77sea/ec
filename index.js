@@ -99,18 +99,38 @@ console.log(newSegEndPt)
 //rotate unit vector
 let newSegEndPtRotated = road.rotateAboutOrigin({x: newSegEndPt.x, y: newSegEndPt.y, z: 0}, 90)
 
-
+//build a unit vector seg to get mid point (will be from origin)
+let newSegFromOrigin = {startPt: {x: 0, y: 0, z: 0}, endPt: {x: newSegEndPtRotated.x , y: newSegEndPtRotated.y, z: 0}}
+let midPt = road.getSegMidPt({
+	startPt: {
+		x: 0,
+		y: -51900,
+		z: 0
+	},
+	endPt: {
+		x: 5,
+		y: -51897,
+		z: 0
+	}
+})
+console.log(midPt)
+//move unit vector to world
 //first arg is point to translate, startPt is offset by which to translate first arg)
 // newSegEndPt ,{x: 5, y: -51897, z: 0}
-let newSegToWorld = road.translatePtToWorld({x: newSegEndPtRotated.x, y: newSegEndPtRotated.y, z: 0}, {x: 5, y: -51897, z: 0})
+let newSegToWorld = road.translatePtToWorld({x: newSegEndPtRotated.x, y: newSegEndPtRotated.y, z: 0},  {x: midPt.x, y: midPt.y, z: 0} ) //{x: 5, y: -51897, z: 0}) //{x: midPt.x, y: midPt.y, z: 0}
 
-road.vertsRoad.push(5)
-road.vertsRoad.push(-51897-1)
-road.vertsRoad.push(0)
 
-road.vertsRoad.push(newSegToWorld.x)
-road.vertsRoad.push(newSegToWorld.y-1)
-road.vertsRoad.push(0)
+// turn this into new road
+let vertsNewRoad = []
+vertsNewRoad.push(midPt.x)
+vertsNewRoad.push(midPt.y)
+vertsNewRoad.push(0)
+
+vertsNewRoad.push(newSegToWorld.x)
+vertsNewRoad.push(newSegToWorld.y)
+vertsNewRoad.push(0)
+
+
 
 
 
@@ -140,9 +160,18 @@ road.vertsRoad.push(0)
 
 let vertsRoad = road.getRoad()
 
+let vertsNewRoad32 = new Float32Array(vertsNewRoad)
+
 
 //put road vets in a typed array for 3js to consumed
 let vertsRoad32 = new Float32Array(vertsRoad);
+
+var geomNewRoad = new THREE.BufferGeometry();
+geomNewRoad.addAttribute('position', new THREE.BufferAttribute(vertsNewRoad32, 3));
+let lineNewRoad = new THREE.Line(geomNewRoad, matRoad)
+scene.add(lineNewRoad)
+
+
 
 var geomRoad = new THREE.BufferGeometry();
 geomRoad.addAttribute('position', new THREE.BufferAttribute(vertsRoad32, 3));

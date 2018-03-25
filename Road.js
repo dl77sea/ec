@@ -25,7 +25,7 @@ class Road {
       }
     )
 
-    this.startSpawnPt = this.getSegMidPt(spawnSeg)
+    // this.startSpawnPt = this.getSegMidPt(spawnSeg)
     //console.log(this.roadSeedX)
 
     //setup road segment length
@@ -48,8 +48,12 @@ class Road {
     console.log(this.turnThresh)
   }
 
-  getSegMidPt(spawnSeg) {
-  // if ((y/this.roadSegLength > 0) && Math.abs(Math.asin(x/this.roadSegLength)) < this.turnThresh) {
+  getSegMidPt(seg) {
+    //mid = (x1+x2)/2 , (y1+y2)/2
+    let x = (seg.startPt.x+seg.endPt.x)/2
+    let y = (seg.startPt.y+seg.endPt.y)/2
+
+    return {x: x, y: y}
   }
 
   //return a segment of distance dist in direction dir (where dir is just -1 or +1),
