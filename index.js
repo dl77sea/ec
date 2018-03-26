@@ -70,11 +70,11 @@ let segs = 1500
 let newRoadSeg
 let transformedRoadSeg
 
-// for (let i = 0; i < segs; i++) {
-//   newRoadSeg = road.getNewRoadSeg()
-//   road.addSeg(newRoadSeg)
-// }
-
+for (let i = 0; i < segs; i++) {
+  newRoadSeg = road.getNewRoadSeg()
+  road.addSeg(newRoadSeg)
+}
+/*---
 road.vertsRoad.push(0)
 road.vertsRoad.push(-52000)
 road.vertsRoad.push(0)
@@ -129,7 +129,7 @@ vertsNewRoad.push(0)
 vertsNewRoad.push(newSegToWorld.x)
 vertsNewRoad.push(newSegToWorld.y)
 vertsNewRoad.push(0)
-
+---*/
 
 
 
@@ -160,18 +160,17 @@ vertsNewRoad.push(0)
 
 let vertsRoad = road.getRoad()
 
-let vertsNewRoad32 = new Float32Array(vertsNewRoad)
+// let vertsNewRoad32 = new Float32Array(vertsNewRoad)
 
 
 //put road vets in a typed array for 3js to consumed
 let vertsRoad32 = new Float32Array(vertsRoad);
-
+/*
 var geomNewRoad = new THREE.BufferGeometry();
 geomNewRoad.addAttribute('position', new THREE.BufferAttribute(vertsNewRoad32, 3));
 let lineNewRoad = new THREE.Line(geomNewRoad, matRoad)
 scene.add(lineNewRoad)
-
-
+*/
 
 var geomRoad = new THREE.BufferGeometry();
 geomRoad.addAttribute('position', new THREE.BufferAttribute(vertsRoad32, 3));
@@ -197,7 +196,7 @@ let deg = 0.0174533
 
 camera.position.x = 0;
 camera.position.y = -51900; // -52000 / 2; //-104000;
-camera.position.z = 10;
+camera.position.z = 600;
 
 
 camera.rotateX(deg * 0)
