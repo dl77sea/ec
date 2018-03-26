@@ -41,7 +41,8 @@ var lineTile = new THREE.Line(geomTile, matRoad);
 scene.add(lineTile)
 
 //test: build road here
-let road = new Road()
+let spawnSeg = { startPt: {x: -52000, y: -52000, z: 0}, endPt: {x: 52000, y: -52000, z: 0} }
+let road = new Road(spawnSeg)
 // road.addSeg()
 // road.addSeg()
 // road.addSeg()
@@ -94,7 +95,6 @@ road.vertsRoad.push(0)
 
 //result of this origin translated
 let newSegEndPt = road.getUnitVector({startPt: {x: 0, y: -51900, z: 0}, endPt: {x: 5, y: -51897, z: 0}})
-console.log(newSegEndPt)
 
 //rotate unit vector
 let newSegEndPtRotated = road.rotateAboutOrigin({x: newSegEndPt.x, y: newSegEndPt.y, z: 0}, 90)
@@ -196,7 +196,7 @@ let deg = 0.0174533
 
 camera.position.x = 0;
 camera.position.y = -51900; // -52000 / 2; //-104000;
-camera.position.z = 600;
+camera.position.z = 1000;
 
 
 camera.rotateX(deg * 0)
