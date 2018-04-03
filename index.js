@@ -1,3 +1,5 @@
+var segs = 1500
+
 /*todo: put most of this in Scene*/
 
 var scene = new THREE.Scene();
@@ -10,18 +12,14 @@ document.body.appendChild(renderer.domElement);
 var geomTile = new THREE.BufferGeometry();
 
 //vertices for tile (20x20 miles) (todo: move this to Tile)
-var vertsTile = new Float32Array([
-  -52000.0, -52000.0, 1.0,
+var vertsTile = new Float32Array([-52000.0, -52000.0, 1.0,
   52000.0, -52000.0, 1.0,
-  52000.0, 52000.0, 1.0,
-  -52000.0, 52000.0, 1.0,
-  -52000.0, -52000.0, 1.0
+  52000.0, 52000.0, 1.0, -52000.0, 52000.0, 1.0, -52000.0, -52000.0, 1.0
 ]);
 
-var vertsGrid32 = new Float32Array([
-  -52000.0, -0, 1.0,
+var vertsGrid32 = new Float32Array([-52000.0, -0, 1.0,
   52000.0, 0, 1.0,
-  ]);
+]);
 
 
 // add tile vertices to geomTile buffer (this buffer (geomTile) will be consumed by THREE.Line
@@ -41,64 +39,110 @@ var lineTile = new THREE.Line(geomTile, matRoad);
 scene.add(lineTile)
 
 //test: build road here
-let spawnSeg = { startPt: {x: -52000, y: -52000, z: 0}, endPt: {x: 52000, y: -52000, z: 0} }
-let road = new Road(spawnSeg)
 
-let segs = 1500
-let newRoadSeg
+//road1
+// let vertsRoad = buildRoad(spawnSeg)
 
+//road2
+// let i=250
+// spawnSeg2 = {
+// 	startPt:
+// 		{x: vertsRoad[i*3+0], y: vertsRoad[i*3+1], z: 0},
+// 	endPt:
+// 		{x: vertsRoad[i*3+3], y: vertsRoad[i*3+4], z: 0}
+// }
+// let vertsRoadTwo = buildRoad(spawnSeg2, 90, false)
 
-for (let i = 0; i < segs; i++) {
-  newRoadSeg = road.getNewRoadSeg()
-  road.addSeg(newRoadSeg)
+//build a road
+let numRoadsToBuild = 3
+let initialSpawnSeg = {
+  startPt: {
+    x: -52000,
+    y: -52000,
+    z: 0
+  },
+  endPt: {
+    x: 52000,
+    y: -52000,
+    z: 0
+  }
 }
 
-let i=250
+let spawnSeg = null
+let iVertsRoad = Math.floor(segs/2)
+let road = null
+let vertsRoad = null
+let prevRoadDir = null
 
-console.log(road.vertsRoad[i*3+0])
-console.log(road.vertsRoad[i*3+1])
-console.log(road.vertsRoad[i*3+2])
-console.log(road.vertsRoad[i*3+3])
-console.log(road.vertsRoad[i*3+4])
-console.log(road.vertsRoad[i*3+5])
+while (numRoadsToBuild > 0) {
+  //spawn a road
+  if (spawnSeg === null) {
+    //if no roads yet exist
+		console.log("initialSpawnSeg")
+    road = buildRoad(initialSpawnSeg, 90, "left")
+  } else {
+		if(prevRoadDir === "left") {
+			console.log("prev was left")
+			road = buildRoad(spawnSeg, -90, "right")
+		} else {
+			console.log("prev was right")
+			road = buildRoad(spawnSeg, 90, "left")
+		}
+  }
+	//get a spawn seg from this road
+	vertsRoad = road.getRoad()
+	spawnSeg = {
+		startPt: {
+			x: vertsRoad[iVertsRoad*3+0],
+			y: vertsRoad[iVertsRoad*3+1],
+			z: vertsRoad[iVertsRoad*3+2]
+		},
+		endPt: {
+			x: vertsRoad[iVertsRoad*3+3],
+			y: vertsRoad[iVertsRoad*3+4],
+			z: vertsRoad[iVertsRoad*3+5]
+		}
+	}
+	prevRoadDir = road.direction
+	//add road to scene
+	addLine(vertsRoad, matRoad)
 
-spawnSeg2 = {
-	startPt:
-		{x: road.vertsRoad[i*3+0], y: road.vertsRoad[i*3+1], z: 0},
-	endPt:
-		{x: road.vertsRoad[i*3+3], y: road.vertsRoad[i*3+4], z: 0}
+	numRoadsToBuild--
 }
 
-let roadTwo = new Road(spawnSeg2, 90, false)
+/*
+
+*/
 
 
-for (let i = 0; i < segs; i++) {
-  newRoadSeg = roadTwo.getNewRoadSeg()
-  roadTwo.addSeg(newRoadSeg)
+
+//build a road
+function buildRoad(spawnSeg, rot = 90, directionLeft = true) {
+  let road = new Road(spawnSeg, rot, directionLeft)
+  let newRoadSeg
+  for (let i = 0; i < segs; i++) {
+    newRoadSeg = road.getNewRoadSeg()
+    road.addSeg(newRoadSeg)
+  }
+	//return road object
+  return road
 }
-
-
-let vertsRoad = road.getRoad()
-let vertsRoadTwo = roadTwo.getRoad()
-
-//put road verts in a typed array for 3js to consume
-let vertsRoad32 = new Float32Array(vertsRoad);
-let vertsRoad32roadTwo = new Float32Array(vertsRoadTwo);
-console.log(":::",vertsRoad)
-console.log(":::",vertsRoadTwo)
 
 //road
-var geomRoad = new THREE.BufferGeometry();
-geomRoad.addAttribute('position', new THREE.BufferAttribute(vertsRoad32, 3));
-let lineRoad = new THREE.Line(geomRoad, matRoad)
-scene.add(lineRoad)
+// addLine(vertsRoad, matRoad)
 
 //road 2
-var geomRoadTwo = new THREE.BufferGeometry();
-geomRoadTwo.addAttribute('position', new THREE.BufferAttribute(vertsRoad32roadTwo, 3));
-let lineRoadTwo = new THREE.Line(geomRoadTwo, matRoad)
-scene.add(lineRoadTwo)
+// addLine(vertsRoadTwo, matRoad)
 
+function addLine(verts, mat) {
+  let verts32 = new Float32Array(verts);
+  let geom = new THREE.BufferGeometry();
+  geom.addAttribute('position', new THREE.BufferAttribute(verts32, 3));
+  let newGeom = new THREE.Line(geom, mat)
+  scene.add(newGeom)
+}
+
+// add grid to scene
 var geomGrid = new THREE.BufferGeometry();
 geomGrid.addAttribute('position', new THREE.BufferAttribute(vertsGrid32, 3));
 let lineGrid = new THREE.Line(geomGrid, matRoad)

@@ -13,11 +13,12 @@ class Road {
 
   //rotDegrees: direction to rotate new road seg
   //seg: segment to rotate new seg off of
-  constructor(seg, rotDegrees = 90, directionLeft = true) {
+  constructor(seg, rotDegrees, direction) {
+    console.log(direction)
 
-    if(!directionLeft) {
-      rotDegrees= -90
-    }
+    this.direction = direction
+
+
     /*
     make sure newly generated seg points up and left or up and right
     depending on initial seg direction
@@ -67,7 +68,7 @@ class Road {
 
     //setup road segment length
     this.roadSegLength = 100
-    this.directionLeft = directionLeft
+    // this.directionLeft = directionLeft
     //seed first road segment (start pt and end pt of first segment)
     // this.vertsRoad = [0, -this.roadSeedX, 0, 0, -this.roadSeedX + this.roadSegLength, 0]
     // this.vertsRoad = []
@@ -290,7 +291,7 @@ class Road {
     this.degrees = 5
 
     if (Math.random() > 0.75) {
-      console.log("rand happened")
+      // console.log("rand happened")
       return this.rotateRoadSegAboutOrigin(currentRdEndPtRelativeToOrigin, this.degrees * this.mult)
     } else {
       // console.log('str')
@@ -391,7 +392,7 @@ class Road {
   }
 
   rotateAboutOrigin(endPt, degrees) {
-    console.log("entered rotateAboutOrigin")
+    // console.log("entered rotateAboutOrigin")
     let radDegrees = 0.0174533 * degrees;
     // console.log("from rot: ", endPt)
     let x = endPt.x * Math.cos(radDegrees) - endPt.y * Math.sin(radDegrees)
@@ -423,12 +424,12 @@ class Road {
     let y = pt.y //endPt.x * Math.sin(radDegrees) + endPt.y * Math.cos(radDegrees)
     let z = 0
 
-    console.log("from rotateRoadSegAboutOrigin: endPt.x, rotated EndPt.x", endPt.x, x)
+    // console.log("from rotateRoadSegAboutOrigin: endPt.x, rotated EndPt.x", endPt.x, x)
 
     // if ((y/this.roadSegLength > 0) && Math.abs(Math.asin(x/this.roadSegLength)) < this.turnThresh) {
 
     //constrain to left or right direction
-    if (this.directionLeft) {
+    if (this.direction === "left") {
       //go up and left
       if (x <= 0 && y >= 0) {
         // console.log("ret rotated end pt")
@@ -446,7 +447,7 @@ class Road {
         }
       }
     } else {
-      console.log("was right")
+      // console.log("was right")
       // go up and right
       if (x >= 0 && y >= 0) {
         // console.log("ret rotated end pt")
