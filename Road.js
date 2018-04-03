@@ -10,7 +10,44 @@ class Road {
   midOnLine(),
   this.segsSinceLastBranch branch control from index
   */
-  constructor(seg) {
+
+  //rotDegrees: direction to rotate new road seg
+  //seg: segment to rotate new seg off of
+  constructor(seg, rotDegrees = 90, directionLeft = true) {
+
+    if(!directionLeft) {
+      rotDegrees= -90
+    }
+    /*
+    make sure newly generated seg points up and left or up and right
+    depending on initial seg direction
+    (reason for handling degrees in range 180 to 360 is bc some times seg spawns off side boundaries)
+    (important so that roads do not "build themselves" towards the camera upon animation)
+
+    if constructor arg seg.start.x < seg.end.x
+    then constrain this road's segs to;
+    cos 1, sin 0 and cos 0, sin 1
+
+    if constructor arg seg.start.x > seg.end.x
+    then constrain this road's segs to;
+    cos -1, sin 0 and cos 0, sin 1
+
+    abv will work as long as road segments always pointing away from camera or sideways (never towards it)
+    */
+
+    /*
+    determine direction (up and left or up and right)
+
+    if constructor arg left or right true
+      then use supplied direction
+      (this is an option to provide roads from boundaries)
+
+    if spawn seg left,
+      set this road right,
+      else left
+
+    */
+
     //spawnSeg is segment that will spawn this road
     // {startPt: startPt, endPt: endPt} //pt = {x: x, y: y, z: 0}
 
@@ -30,7 +67,7 @@ class Road {
 
     //setup road segment length
     this.roadSegLength = 100
-
+    this.directionLeft = directionLeft
     //seed first road segment (start pt and end pt of first segment)
     // this.vertsRoad = [0, -this.roadSeedX, 0, 0, -this.roadSeedX + this.roadSegLength, 0]
     // this.vertsRoad = []
@@ -40,17 +77,35 @@ class Road {
     //result of this origin translated
     let firstRoadSeg = this.getUnitVector(seg)
 
-    //rotate and scale unit vector
-    let firstRoadSegEndPtRotated = this.rotateAboutOrigin(firstRoadSeg.endPt, 90) //{x: newSegEndPt.x, y: newSegEndPt.y, z: 0}
+    //rotate unit vector from constructor arg seg
+    let firstRoadSegEndPtRotated = this.rotateAboutOrigin(firstRoadSeg.endPt, rotDegrees) //{x: newSegEndPt.x, y: newSegEndPt.y, z: 0}
 
     //build a unit vector seg to get mid point (will be from origin)
-    let firstRoadSegFromOrigin = {startPt: {x: 0, y: 0, z: 0}, endPt: {x: firstRoadSegEndPtRotated.x , y: firstRoadSegEndPtRotated.y, z: 0}}
+    let firstRoadSegFromOrigin = {
+      startPt: {
+        x: 0,
+        y: 0,
+        z: 0
+      },
+      endPt: {
+        x: firstRoadSegEndPtRotated.x,
+        y: firstRoadSegEndPtRotated.y,
+        z: 0
+      }
+    }
+
+    //scale first segment by road length (this establishes segment length for all segs since each seg uses the previous to offset it's new end point)
+    firstRoadSegFromOrigin = this.scaleSegFromOrigin(firstRoadSegFromOrigin, this.roadSegLength)
 
     //get mid point of cons arg seg
     let midPt = this.getSegMidPt(seg)
 
     //translate it by it's startPt to mid point of constructor arg seg. args: seg to translate, point to translate it to
-    let firstRoadSegFromWorld = this.translateSegToWorld(firstRoadSegFromOrigin,  {x: midPt.x, y: midPt.y, z: 0} ) //{x: 5, y: -51897, z: 0}) //{x: midPt.x, y: midPt.y, z: 0}
+    let firstRoadSegFromWorld = this.translateSegToWorld(firstRoadSegFromOrigin, {
+      x: midPt.x,
+      y: midPt.y,
+      z: 0
+    }) //{x: 5, y: -51897, z: 0}) //{x: midPt.x, y: midPt.y, z: 0}
 
     //build first road seg
     this.vertsRoad = [firstRoadSegFromWorld.startPt.x, firstRoadSegFromWorld.startPt.y, 0, firstRoadSegFromWorld.endPt.x, firstRoadSegFromWorld.endPt.y, 0]
@@ -66,15 +121,23 @@ class Road {
 
     //eventually must be set from arguments to consstructor
     this.turnThresh = 0.0174533 * 90
-    console.log(this.turnThresh)
+    // console.log(this.turnThresh)
   }
+  scaleSegFromOrigin(seg, scale) {
+    seg.endPt.x = seg.endPt.x * scale
+    seg.endPt.y = seg.endPt.y * scale
 
+    return seg
+  }
   getSegMidPt(seg) {
     //mid = (x1+x2)/2 , (y1+y2)/2
-    let x = (seg.startPt.x+seg.endPt.x)/2
-    let y = (seg.startPt.y+seg.endPt.y)/2
+    let x = (seg.startPt.x + seg.endPt.x) / 2
+    let y = (seg.startPt.y + seg.endPt.y) / 2
 
-    return {x: x, y: y}
+    return {
+      x: x,
+      y: y
+    }
   }
 
   //return a segment of distance dist in direction dir (where dir is just -1 or +1),
@@ -92,14 +155,24 @@ class Road {
 
     let originTranslatedSeg = this.translateSegToOrigin(seg.startPt, seg.endPt)
     let div = Math.sqrt(
-      originTranslatedSeg.endPt.x*originTranslatedSeg.endPt.x +
-      originTranslatedSeg.endPt.y*originTranslatedSeg.endPt.y
+      originTranslatedSeg.endPt.x * originTranslatedSeg.endPt.x +
+      originTranslatedSeg.endPt.y * originTranslatedSeg.endPt.y
     )
 
-    let x = (originTranslatedSeg.endPt.x/div)*1
-    let y = (originTranslatedSeg.endPt.y/div)*1
+    let x = (originTranslatedSeg.endPt.x / div) * 1
+    let y = (originTranslatedSeg.endPt.y / div) * 1
 
-    return {startPt: {x: 0, y: 0, z: 0}, endPt: {x: x, y: y}}
+    return {
+      startPt: {
+        x: 0,
+        y: 0,
+        z: 0
+      },
+      endPt: {
+        x: x,
+        y: y
+      }
+    }
   }
 
   getAngle(seg) {
@@ -214,9 +287,10 @@ class Road {
   determineBend(currentRdEndPtRelativeToOrigin) {
 
     this.mult = this.mult * (-1)
-    this.degrees= 5
+    this.degrees = 5
 
-    if(Math.random() > 0.75) {
+    if (Math.random() > 0.75) {
+      console.log("rand happened")
       return this.rotateRoadSegAboutOrigin(currentRdEndPtRelativeToOrigin, this.degrees * this.mult)
     } else {
       // console.log('str')
@@ -317,37 +391,86 @@ class Road {
   }
 
   rotateAboutOrigin(endPt, degrees) {
+    console.log("entered rotateAboutOrigin")
     let radDegrees = 0.0174533 * degrees;
+    // console.log("from rot: ", endPt)
+    let x = endPt.x * Math.cos(radDegrees) - endPt.y * Math.sin(radDegrees)
+    let y = endPt.x * Math.sin(radDegrees) + endPt.y * Math.cos(radDegrees)
 
-    let x = (endPt.x) * Math.cos(radDegrees) - (endPt.y) * Math.sin(radDegrees)
-    let y = (endPt.x) * Math.sin(radDegrees) + (endPt.y) * Math.cos(radDegrees)
-
-    return {x: x, y: y}
+    return {
+      x: x,
+      y: y
+    }
   }
 
+  //returns an end point rotated about origin amount degrees
   rotateRoadSegAboutOrigin(endPt, degrees) {
-    // if(Math.asin(endPt.x)... finish this
+
+    //figure out how to constrain x and y to constraints for this road
+
+    // if constructor arg seg.start.x < seg.end.x
+    // then constrain this road's segs to;
+    // cos 1, sin 0 and cos 0, sin 1
+    //
+    // if constructor arg seg.start.x > seg.end.x
+    // then constrain this road's segs to;
+    // cos -1, sin 0 and cos 0, sin 1
+
+
+
     let pt = this.rotateAboutOrigin(endPt, degrees)
     let x = pt.x //endPt.x * Math.cos(radDegrees) - endPt.y * Math.sin(radDegrees)
     let y = pt.y //endPt.x * Math.sin(radDegrees) + endPt.y * Math.cos(radDegrees)
     let z = 0
-    if ((y/this.roadSegLength > 0) && Math.abs(Math.asin(x/this.roadSegLength)) < this.turnThresh) {
-      // console.log("happens1")
-      return {
-        x: x,
-        y: y,
-        z: z
+
+    console.log("from rotateRoadSegAboutOrigin: endPt.x, rotated EndPt.x", endPt.x, x)
+
+    // if ((y/this.roadSegLength > 0) && Math.abs(Math.asin(x/this.roadSegLength)) < this.turnThresh) {
+
+    //constrain to left or right direction
+    if (this.directionLeft) {
+      //go up and left
+      if (x <= 0 && y >= 0) {
+        // console.log("ret rotated end pt")
+        return {
+          x: x,
+          y: y,
+          z: z
+        }
+      } else {
+      //   console.log("ret arg end pt")
+        return {
+          x: endPt.x,
+          y: endPt.y,
+          z: endPt.z
+        }
       }
     } else {
-      // console.log("happens2")
-      return {
-        x: endPt.x,
-        y: endPt.y,
-        z: endPt.z
+      console.log("was right")
+      // go up and right
+      if (x >= 0 && y >= 0) {
+        // console.log("ret rotated end pt")
+        return {
+          x: x,
+          y: y,
+          z: z
+        }
+      } else {
+      //   console.log("ret arg end pt")
+        return {
+          x: endPt.x,
+          y: endPt.y,
+          z: endPt.z
+        }
       }
     }
+    //
+    // return {
+    //   x: endPt.x,
+    //   y: endPt.y,
+    //   z: endPt.z
+    // }
   }
-
   getRoad() {
 
     return this.vertsRoad

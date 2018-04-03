@@ -43,140 +43,61 @@ scene.add(lineTile)
 //test: build road here
 let spawnSeg = { startPt: {x: -52000, y: -52000, z: 0}, endPt: {x: 52000, y: -52000, z: 0} }
 let road = new Road(spawnSeg)
-// road.addSeg()
-// road.addSeg()
-// road.addSeg()
-
-/*
-let segmentToOrigin = this.translateSegToOrigin(startPt, endPt)
-let degrees = 15
-
-determine bend in road
-let rotatedEndPt = this.determineBend(segmentToOrigin.endPt)
-
-let rotatedEndPt = segmentToOrigin.endPt
-let rotatedEndPt = this.rotateAboutOrigin(segmentToOrigin.endPt, degrees)
-
-put endPt back into world space
-rotatedEndPt is point to translate, startPt is offset by which to translate rotatedEndPt
-let translatedEndPt = this.translatePtToWorld(rotatedEndPt, startPt)
-
-add transformed end point to vertsRoad
-this.vertsRoad.push(translatedEndPt.x)
-this.vertsRoad.push(translatedEndPt.y)
-this.vertsRoad.push(translatedEndPt.z)
-*/
 
 let segs = 1500
 let newRoadSeg
-let transformedRoadSeg
+
 
 for (let i = 0; i < segs; i++) {
   newRoadSeg = road.getNewRoadSeg()
   road.addSeg(newRoadSeg)
 }
-/*---
-road.vertsRoad.push(0)
-road.vertsRoad.push(-52000)
-road.vertsRoad.push(0)
 
-road.vertsRoad.push(0)
-road.vertsRoad.push(-51900)
-road.vertsRoad.push(0)
+let i=250
 
-road.vertsRoad.push(0)
-road.vertsRoad.push(-51900)
-road.vertsRoad.push(0)
+console.log(road.vertsRoad[i*3+0])
+console.log(road.vertsRoad[i*3+1])
+console.log(road.vertsRoad[i*3+2])
+console.log(road.vertsRoad[i*3+3])
+console.log(road.vertsRoad[i*3+4])
+console.log(road.vertsRoad[i*3+5])
 
-road.vertsRoad.push(5)
-road.vertsRoad.push(-51897)
-road.vertsRoad.push(0)
+spawnSeg2 = {
+	startPt:
+		{x: road.vertsRoad[i*3+0], y: road.vertsRoad[i*3+1], z: 0},
+	endPt:
+		{x: road.vertsRoad[i*3+3], y: road.vertsRoad[i*3+4], z: 0}
+}
 
-
-//result of this origin translated
-let newSegEndPt = road.getUnitVector({startPt: {x: 0, y: -51900, z: 0}, endPt: {x: 5, y: -51897, z: 0}})
-
-//rotate unit vector
-let newSegEndPtRotated = road.rotateAboutOrigin({x: newSegEndPt.x, y: newSegEndPt.y, z: 0}, 90)
-
-//build a unit vector seg to get mid point (will be from origin)
-let newSegFromOrigin = {startPt: {x: 0, y: 0, z: 0}, endPt: {x: newSegEndPtRotated.x , y: newSegEndPtRotated.y, z: 0}}
-let midPt = road.getSegMidPt({
-	startPt: {
-		x: 0,
-		y: -51900,
-		z: 0
-	},
-	endPt: {
-		x: 5,
-		y: -51897,
-		z: 0
-	}
-})
-console.log(midPt)
-//move unit vector to world
-//first arg is point to translate, startPt is offset by which to translate first arg)
-// newSegEndPt ,{x: 5, y: -51897, z: 0}
-let newSegToWorld = road.translatePtToWorld({x: newSegEndPtRotated.x, y: newSegEndPtRotated.y, z: 0},  {x: midPt.x, y: midPt.y, z: 0} ) //{x: 5, y: -51897, z: 0}) //{x: midPt.x, y: midPt.y, z: 0}
+let roadTwo = new Road(spawnSeg2, 90, false)
 
 
-// turn this into new road
-let vertsNewRoad = []
-vertsNewRoad.push(midPt.x)
-vertsNewRoad.push(midPt.y)
-vertsNewRoad.push(0)
-
-vertsNewRoad.push(newSegToWorld.x)
-vertsNewRoad.push(newSegToWorld.y)
-vertsNewRoad.push(0)
----*/
-
-
-
-
-
-// let newSegToOrigin = road.translateSegToOrigin({x: 0, y: -51900, z: 0},newSegEndPt)
-// console.log(newSegToOrigin)
-//
-// let rotatedNewSegEndPt = road.rotateAboutOrigin(newSegToOrigin.endPt, 90)
-// console.log(rotatedNewSegEndPt)
-//
-// //first arg is point to translate, startPt is offset by which to translate first arg)
-// // newSegEndPt ,{x: 5, y: -51897, z: 0}
-// let newSegToWorld = road.translatePtToWorld(rotatedNewSegEndPt, {x: 5, y: -51897, z: 0})
-// road.vertsRoad.push(5)
-// road.vertsRoad.push(-51897)
-// road.vertsRoad.push(0)
-//
-// road.vertsRoad.push(newSegToWorld.x)
-// road.vertsRoad.push(newSegToWorld.y)
-// road.vertsRoad.push(0)
-
-
-
-// road.addSeg({endPt: {x: 0, y: -51900, z: 0}, startPt: {x: 0, y: -52000, z: 0}})
-// road.addSeg({endPt: {x: 0, y: -51900, z: 0}, startPt: {x: 100, y: -50800, z: 0}})
+for (let i = 0; i < segs; i++) {
+  newRoadSeg = roadTwo.getNewRoadSeg()
+  roadTwo.addSeg(newRoadSeg)
+}
 
 
 let vertsRoad = road.getRoad()
+let vertsRoadTwo = roadTwo.getRoad()
 
-// let vertsNewRoad32 = new Float32Array(vertsNewRoad)
-
-
-//put road vets in a typed array for 3js to consumed
+//put road verts in a typed array for 3js to consume
 let vertsRoad32 = new Float32Array(vertsRoad);
-/*
-var geomNewRoad = new THREE.BufferGeometry();
-geomNewRoad.addAttribute('position', new THREE.BufferAttribute(vertsNewRoad32, 3));
-let lineNewRoad = new THREE.Line(geomNewRoad, matRoad)
-scene.add(lineNewRoad)
-*/
+let vertsRoad32roadTwo = new Float32Array(vertsRoadTwo);
+console.log(":::",vertsRoad)
+console.log(":::",vertsRoadTwo)
 
+//road
 var geomRoad = new THREE.BufferGeometry();
 geomRoad.addAttribute('position', new THREE.BufferAttribute(vertsRoad32, 3));
 let lineRoad = new THREE.Line(geomRoad, matRoad)
 scene.add(lineRoad)
-console.log(road.totalSegs)
+
+//road 2
+var geomRoadTwo = new THREE.BufferGeometry();
+geomRoadTwo.addAttribute('position', new THREE.BufferAttribute(vertsRoad32roadTwo, 3));
+let lineRoadTwo = new THREE.Line(geomRoadTwo, matRoad)
+scene.add(lineRoadTwo)
 
 var geomGrid = new THREE.BufferGeometry();
 geomGrid.addAttribute('position', new THREE.BufferAttribute(vertsGrid32, 3));
@@ -186,22 +107,12 @@ scene.add(lineGrid)
 
 //establish camera location and camera target
 let deg = 0.0174533
-// camera.position.x = 0;
-// camera.position.y = -52000; //-104000;
-// camera.position.z = 500;
 
-// camera.position.x = 0;
-// camera.position.y = 0; // -52000 / 2; //-104000;
-// camera.position.z = 150000;
-
-camera.position.x = 0;
-camera.position.y = -51900; // -52000 / 2; //-104000;
-camera.position.z = 1000;
-
+camera.position.x = 50000;
+camera.position.y = 0; // -52000 / 2; //-104000;
+camera.position.z = 150000;
 
 camera.rotateX(deg * 0)
-// camera.lookAt( new THREE.Vector3( 0, 1, 10000 ) );
-// camera.lookAt( new THREE.Vector3( 0, 0, 10 ) );
 
 function animate() {
   requestAnimationFrame(animate);
@@ -211,15 +122,3 @@ function animate() {
 
 //invoke scene render
 animate();
-
-
-
-// scene = new Scene()
-//
-// //while road seg not intersecting tile boundary, add segs
-// while(scene.updateRoad) {
-//   scene.updateRoad
-// }
-// var blockTyp
-// var blockTypeShort = 250
-//major range between 3 and 4 long blocks, 7 and 16 short blocks
