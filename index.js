@@ -1,4 +1,4 @@
-var segs = 1500
+var segs = 1000
 
 /*todo: put most of this in Scene*/
 
@@ -54,7 +54,7 @@ scene.add(lineTile)
 // let vertsRoadTwo = buildRoad(spawnSeg2, 90, false)
 
 //build a road
-let numRoadsToBuild = 3
+let numRoadsToBuild = 30
 let initialSpawnSeg = {
   startPt: {
     x: -52000,
