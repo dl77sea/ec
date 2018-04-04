@@ -1,4 +1,5 @@
 var segs = 1000
+var numSegsBtwnSpawn = 250
 
 /*todo: put most of this in Scene*/
 
@@ -69,11 +70,43 @@ let initialSpawnSeg = {
 }
 
 let spawnSeg = null
-let iVertsRoad = Math.floor(segs/2)
+let iVertsRoad = Math.floor(segs / 2)
 let road = null
 let vertsRoad = null
 let prevRoadDir = null
 
+// this is a que that accumulates spawnSegs during road generation,
+// then shift that road off the que,
+// leaving only roads pushed onto que during that road's generation
+let spawnSegs = [initialSpawnSeg]
+
+//initial road generation will be to opposite of this value
+prevRoadDir = "right"
+
+// while (spawnSegs.length > 0) {
+let numSegs = 0
+
+while (numSegs < 4) {
+  console.log("prevRoadDir", prevRoadDir)
+
+  //figure out how to make spawnseg work here
+  if (prevRoadDir === "left") {
+    road = buildRoad(spawnSegs[0], -90, "right")
+  } else {
+    road = buildRoad(spawnSegs[0], 90, "left")
+  }
+
+	// add road to scene
+	// prevRoadDir = road.direction
+	vertsRoad = road.getRoad()
+	numSegs++
+	addLine(vertsRoad, matRoad)
+
+	numRoadsToBuild--
+}
+
+
+/*
 while (numRoadsToBuild > 0) {
   //spawn a road
   if (spawnSeg === null) {
@@ -110,21 +143,48 @@ while (numRoadsToBuild > 0) {
 	numRoadsToBuild--
 }
 
-/*
-
 */
 
 
 
 //build a road
-function buildRoad(spawnSeg, rot = 90, directionLeft = true) {
-  let road = new Road(spawnSeg, rot, directionLeft)
+function buildRoad(spawnSeg, rot = 90, direction) {
+
+  let road = new Road(spawnSeg, rot, direction)
+
   let newRoadSeg
+  let numSegsSincePrevSpawn = 0
+
   for (let i = 0; i < segs; i++) {
     newRoadSeg = road.getNewRoadSeg()
     road.addSeg(newRoadSeg)
+
+    //if we have traversed enough distance, get a spawnSeg and add it to queue
+    numSegsSincePrevSpawn++
+    if (numSegsSincePrevSpawn === numSegsBtwnSpawn) {
+      let vertsRoad = road.getRoad()
+      spawnSeg = {
+        startPt: {
+          x: vertsRoad[i * 3 + 0],
+          y: vertsRoad[i * 3 + 1],
+          z: vertsRoad[i * 3 + 2]
+        },
+        endPt: {
+          x: vertsRoad[i * 3 + 3],
+          y: vertsRoad[i * 3 + 4],
+          z: vertsRoad[i * 3 + 5]
+        }
+      }
+      spawnSegs.push(spawnSeg)
+      numSegsSincePrevSpawn = 0
+      console.log("set to left")
+      prevRoadDir = "left"
+    }
   }
-	//return road object
+  //update queue
+  spawnSegs.shift()
+
+  //return road object
   return road
 }
 
