@@ -89,7 +89,7 @@ let numSegs = 0
 while (numSegs < 4) {
   console.log("prevRoadDir", prevRoadDir)
 
-  //figure out how to make spawnseg work here
+  //determine if new road is generally NS or EW by angle of spawnSeg
   if (prevRoadDir === "left") {
     road = buildRoad(spawnSegs[0], -90, "right")
   } else {
@@ -102,6 +102,7 @@ while (numSegs < 4) {
 	numSegs++
 	addLine(vertsRoad, matRoad)
 
+  //instead of doing this, you let the number of spawnSegs left in queue itterate the loop
 	numRoadsToBuild--
 }
 
