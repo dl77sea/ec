@@ -88,7 +88,10 @@ let numSegs = 0
 
 while (numSegs < 4) {
   console.log("prevRoadDir", prevRoadDir)
-
+  console.log(spawnSegs[0])
+  let dx = Math.abs(spawnSegs[0].endPt.x - spawnSegs[0].startPt.x)
+  let dy = Math.abs(spawnSegs[0].endPt.y - spawnSegs[0].startPt.y)
+  console.log("dx, dy: ", dx, dy)
   //determine if new road is generally NS or EW by angle of spawnSeg
   if (prevRoadDir === "left") {
     road = buildRoad(spawnSegs[0], -90, "right")
