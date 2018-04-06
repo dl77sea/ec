@@ -203,7 +203,7 @@ class Road {
     if(this.numSegs < 250) {
       randomization = .99
     } else {
-      randomization = 0.9
+      randomization = 0.7
     }
 
     if (Math.random() > randomization) {
