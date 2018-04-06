@@ -1,4 +1,5 @@
 class Road {
+  //seg is segment from previous road from which this road will be generated
   constructor(seg, rotDegrees, direction) {
     console.log(direction)
 
@@ -9,6 +10,9 @@ class Road {
 
     this.roadSegLength = 100
 
+    this.numSegs = 0
+
+    /*
     //result of this origin translated
     let firstRoadSeg = this.getUnitVector(seg)
 
@@ -31,16 +35,60 @@ class Road {
 
     //scale first segment by road length (this establishes segment length for all segs since each seg uses the previous to offset it's new end point)
     firstRoadSegFromOrigin = this.scaleSegFromOrigin(firstRoadSegFromOrigin, this.roadSegLength)
+    */
 
     //get mid point of cons arg seg
     let midPt = this.getSegMidPt(seg)
 
+    // todo: refactor so no need to translate constructor argument seg, just build initial seg manually
+    //do initial rotation here on first segment before scaling it (to keep it EW NS)
+    // rotateRoadSegAboutOrigin(endPt, degrees)
+    let firstRoadSegFromWorld
+    let deltaX = Math.abs(seg.endPt.x - seg.startPt.x)
+    let deltaY = Math.abs(seg.endPt.y - seg.startPt.y)
+    //if originating seg is oriented more EW than NS
+    if(deltaX > deltaY) {
+      //set new seg direction NS
+      firstRoadSegFromWorld = {
+        startPt: {
+          x: midPt.x,
+          y: midPt.y,
+          z: 0
+        },
+        endPt: {
+          x: midPt.x,
+          y: midPt.y+this.roadSegLength,
+          z: 0
+        }
+      }
+    } else {
+      //set new seg direction EW
+      firstRoadSegFromWorld = {
+        startPt: {
+          x: midPt.x,
+          y: midPt.y,
+          z: 0
+        },
+        endPt: {
+          x: midPt.x+this.roadSegLength,
+          y: midPt.y,
+          z: 0
+        }
+      }
+    }
+
+
+
+
+
+
+
     //translate it by it's startPt to mid point of constructor arg seg. args: seg to translate, point to translate it to
-    let firstRoadSegFromWorld = this.translateSegToWorld(firstRoadSegFromOrigin, {
-      x: midPt.x,
-      y: midPt.y,
-      z: 0
-    })
+    // let firstRoadSegFromWorld = this.translateSegToWorld(firstRoadSegFromOrigin, {
+    //   x: midPt.x,
+    //   y: midPt.y,
+    //   z: 0
+    // })
 
     //build first road seg
     this.vertsRoad = [firstRoadSegFromWorld.startPt.x, firstRoadSegFromWorld.startPt.y, 0, firstRoadSegFromWorld.endPt.x, firstRoadSegFromWorld.endPt.y, 0]
@@ -140,6 +188,7 @@ class Road {
     let translatedEndPt = this.translatePtToWorld(rotatedEndPt, seg.startPt)
 
     //add transformed end point to vertsRoad
+    this.numSegs++
     this.vertsRoad.push(translatedEndPt.x)
     this.vertsRoad.push(translatedEndPt.y)
     this.vertsRoad.push(translatedEndPt.z)
@@ -149,7 +198,15 @@ class Road {
     this.mult = this.mult * (-1)
     this.degrees = 5
 
-    if (Math.random() > 0.75) {
+    //set randomization factor of raod path generation by how close it is to start of road
+    let randomization
+    if(this.numSegs < 250) {
+      randomization = .99
+    } else {
+      randomization = 0.9
+    }
+
+    if (Math.random() > randomization) {
       return this.rotateRoadSegAboutOrigin(currentRdEndPtRelativeToOrigin, this.degrees * this.mult)
     } else {
       return currentRdEndPtRelativeToOrigin
@@ -211,7 +268,6 @@ class Road {
     let radDegrees = 0.0174533 * degrees;
     let x = endPt.x * Math.cos(radDegrees) - endPt.y * Math.sin(radDegrees)
     let y = endPt.x * Math.sin(radDegrees) + endPt.y * Math.cos(radDegrees)
-
     return {
       x: x,
       y: y
@@ -230,12 +286,14 @@ class Road {
       //go up and left
       if (x <= 0 && y >= 0) {
         return {
+          //not rotated
           x: x,
           y: y,
           z: z
         }
       } else {
         return {
+          //rotated
           x: endPt.x,
           y: endPt.y,
           z: endPt.z
@@ -245,12 +303,14 @@ class Road {
       // go up and right
       if (x >= 0 && y >= 0) {
         return {
+          //not rotated
           x: x,
           y: y,
           z: z
         }
       } else {
         return {
+          //rotated
           x: endPt.x,
           y: endPt.y,
           z: endPt.z
