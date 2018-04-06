@@ -199,13 +199,14 @@ class Road {
     this.degrees = 5
 
     //set randomization factor of raod path generation by how close it is to start of road
-    let randomization
+    let randomization = 0.5
+    /*
     if(this.numSegs < 250) {
-      randomization = .99
+      randomization = .9
     } else {
-      randomization = 0.7
+      randomization = 0.5
     }
-
+    */
     if (Math.random() > randomization) {
       return this.rotateRoadSegAboutOrigin(currentRdEndPtRelativeToOrigin, this.degrees * this.mult)
     } else {

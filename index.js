@@ -1,5 +1,5 @@
 var segs = 1000
-var numSegsBtwnSpawn = 52
+
 
 /*todo: put most of this in Scene*/
 
@@ -39,23 +39,6 @@ var matRoad = new THREE.LineBasicMaterial({
 var lineTile = new THREE.Line(geomTile, matRoad);
 scene.add(lineTile)
 
-//test: build road here
-
-//road1
-// let vertsRoad = buildRoad(spawnSeg)
-
-//road2
-// let i=250
-// spawnSeg2 = {
-// 	startPt:
-// 		{x: vertsRoad[i*3+0], y: vertsRoad[i*3+1], z: 0},
-// 	endPt:
-// 		{x: vertsRoad[i*3+3], y: vertsRoad[i*3+4], z: 0}
-// }
-// let vertsRoadTwo = buildRoad(spawnSeg2, 90, false)
-
-//build a road
-let numRoadsToBuild = 30
 let initialSpawnSeg = {
   startPt: {
     x: -52000,
@@ -69,138 +52,62 @@ let initialSpawnSeg = {
   }
 }
 
-let spawnSeg = null
-let iVertsRoad = Math.floor(segs / 2)
+let spawnSeg = initialSpawnSeg
+
 let road = null
 let vertsRoad = null
-let prevRoadDir = null
+let prevRoadDir = "left"
+let numRoadsToBuild = 2
 
-// this is a que that accumulates spawnSegs during road generation,
-// then shift that road off the que,
-// leaving only roads pushed onto que during that road's generation
-let spawnSegs = [initialSpawnSeg]
-
-//initial road generation will be to opposite of this value
-prevRoadDir = "right"
-
-// while (spawnSegs.length > 0) {
-let numSegs = 0
-
-while (numSegs < 4) {
-  console.log("prevRoadDir", prevRoadDir)
-  console.log(spawnSegs[0])
-  let dx = Math.abs(spawnSegs[0].endPt.x - spawnSegs[0].startPt.x)
-  let dy = Math.abs(spawnSegs[0].endPt.y - spawnSegs[0].startPt.y)
-  console.log("dx, dy: ", dx, dy)
-  let branchAngle
-  if(dx > dy) {
-    //branchAngle =
-  }
+while (numRoadsToBuild > 0) {
   //determine if new road is generally NS or EW by angle of spawnSeg
   if (prevRoadDir === "left") {
-    road = buildRoad(spawnSegs[0], -90, "right")
+    road = buildRoad(spawnSeg, -90, "right")
   } else {
-    road = buildRoad(spawnSegs[0], 90, "left")
+    road = buildRoad(spawnSeg, 90, "left")
   }
 
-	// add road to scene
-	// prevRoadDir = road.direction
-	vertsRoad = road.getRoad()
-	numSegs++
-	addLine(vertsRoad, matRoad)
+  // add road to scene
+  // prevRoadDir = road.direction
+  vertsRoad = road.getRoad()
+
+  addLine(vertsRoad, matRoad)
 
   //instead of doing this, you let the number of spawnSegs left in queue itterate the loop
-	numRoadsToBuild--
+  numRoadsToBuild--
 }
-
-
-/*
-while (numRoadsToBuild > 0) {
-  //spawn a road
-  if (spawnSeg === null) {
-    //if no roads yet exist
-		console.log("initialSpawnSeg")
-    road = buildRoad(initialSpawnSeg, 90, "left")
-  } else {
-		if(prevRoadDir === "left") {
-			console.log("prev was left")
-			road = buildRoad(spawnSeg, -90, "right")
-		} else {
-			console.log("prev was right")
-			road = buildRoad(spawnSeg, 90, "left")
-		}
-  }
-	//get a spawn seg from this road
-	vertsRoad = road.getRoad()
-	spawnSeg = {
-		startPt: {
-			x: vertsRoad[iVertsRoad*3+0],
-			y: vertsRoad[iVertsRoad*3+1],
-			z: vertsRoad[iVertsRoad*3+2]
-		},
-		endPt: {
-			x: vertsRoad[iVertsRoad*3+3],
-			y: vertsRoad[iVertsRoad*3+4],
-			z: vertsRoad[iVertsRoad*3+5]
-		}
-	}
-	prevRoadDir = road.direction
-	//add road to scene
-	addLine(vertsRoad, matRoad)
-
-	numRoadsToBuild--
-}
-
-*/
-
-
-
 //build a road
 function buildRoad(spawnSeg, rot = 90, direction) {
 
   let road = new Road(spawnSeg, rot, direction)
-
   let newRoadSeg
-  let numSegsSincePrevSpawn = 0
 
-  for (let i = 0; i < segs; i++) {
+  let boundaryRight = 52000
+  let boundaryLeft = -52000
+
+  let boundaryTop = 52000
+  let boundaryBottom = -52000
+
+  // for (let i = 0; i < segs; i++) {
+  let roadInBounds = true
+  while(roadInBounds) {
     newRoadSeg = road.getNewRoadSeg()
-    road.addSeg(newRoadSeg)
-
-    //if we have traversed enough distance, get a spawnSeg and add it to queue
-    numSegsSincePrevSpawn++
-    if (numSegsSincePrevSpawn === numSegsBtwnSpawn) {
-      let vertsRoad = road.getRoad()
-      spawnSeg = {
-        startPt: {
-          x: vertsRoad[i * 3 + 0],
-          y: vertsRoad[i * 3 + 1],
-          z: vertsRoad[i * 3 + 2]
-        },
-        endPt: {
-          x: vertsRoad[i * 3 + 3],
-          y: vertsRoad[i * 3 + 4],
-          z: vertsRoad[i * 3 + 5]
-        }
+    if (
+      newRoadSeg.endPt.x > boundaryLeft &&
+      newRoadSeg.endPt.x < boundaryRight &&
+      newRoadSeg.endPt.y > boundaryBottom &&
+      newRoadSeg.endPt.y < boundaryTop) {
+        road.addSeg(newRoadSeg)
+      } else {
+        roadInBounds = false
       }
-      spawnSegs.push(spawnSeg)
-      numSegsSincePrevSpawn = 0
-      console.log("set to left")
-      prevRoadDir = "left"
-    }
+
   }
-  //update queue
-  spawnSegs.shift()
 
   //return road object
+  prevRoadDir = road.direction
   return road
 }
-
-//road
-// addLine(vertsRoad, matRoad)
-
-//road 2
-// addLine(vertsRoadTwo, matRoad)
 
 function addLine(verts, mat) {
   let verts32 = new Float32Array(verts);
