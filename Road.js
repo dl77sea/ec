@@ -1,6 +1,7 @@
 class Road {
   //seg is segment from previous road from which this road will be generated
   constructor(seg, rotDegrees, direction) {
+
     console.log(direction)
 
     this.direction = direction
@@ -12,42 +13,17 @@ class Road {
 
     this.numSegs = 0
 
-    /*
-    //result of this origin translated
-    let firstRoadSeg = this.getUnitVector(seg)
-
-    //rotate unit vector from constructor arg seg
-    let firstRoadSegEndPtRotated = this.rotateAboutOrigin(firstRoadSeg.endPt, rotDegrees) //{x: newSegEndPt.x, y: newSegEndPt.y, z: 0}
-
-    //build a unit vector seg to get mid point (will be from origin)
-    let firstRoadSegFromOrigin = {
-      startPt: {
-        x: 0,
-        y: 0,
-        z: 0
-      },
-      endPt: {
-        x: firstRoadSegEndPtRotated.x,
-        y: firstRoadSegEndPtRotated.y,
-        z: 0
-      }
-    }
-
-    //scale first segment by road length (this establishes segment length for all segs since each seg uses the previous to offset it's new end point)
-    firstRoadSegFromOrigin = this.scaleSegFromOrigin(firstRoadSegFromOrigin, this.roadSegLength)
-    */
-
     //get mid point of cons arg seg
     let midPt = this.getSegMidPt(seg)
 
-    // todo: refactor so no need to translate constructor argument seg, just build initial seg manually
-    //do initial rotation here on first segment before scaling it (to keep it EW NS)
-    // rotateRoadSegAboutOrigin(endPt, degrees)
+    //build road seg with initial spawn at NS or EW
+
     let firstRoadSegFromWorld
     let deltaX = Math.abs(seg.endPt.x - seg.startPt.x)
     let deltaY = Math.abs(seg.endPt.y - seg.startPt.y)
+
     //if originating seg is oriented more EW than NS
-    if(deltaX > deltaY) {
+    if (deltaX > deltaY) {
       //set new seg direction NS
       firstRoadSegFromWorld = {
         startPt: {
@@ -56,8 +32,8 @@ class Road {
           z: 0
         },
         endPt: {
-          x: midPt.x,
-          y: midPt.y+this.roadSegLength,
+          x: midPt.x + this.roadSegLength,
+          y: midPt.y,
           z: 0
         }
       }
@@ -70,26 +46,61 @@ class Road {
           z: 0
         },
         endPt: {
-          x: midPt.x+this.roadSegLength,
-          y: midPt.y,
+          x: midPt.x,
+          y: midPt.y + this.roadSegLength,
           z: 0
         }
       }
     }
 
+    console.log("--", firstRoadSegFromWorld)
+
+    // console.log("rotate test: ",
+    //   this.rotateAboutOrigin({
+    //     x: startSegTranslatedToOrigin.endPt.x,
+    //     y: startSegTranslatedToOrigin.endPt.y
+    //   }, rotDegrees)
+    // )
+
+    //returns point {startPt, endPt}
+    // translateSegToOrigin(startPt, endPt)
+
+    let startSegTranslatedToOrigin = this.translateSegToOrigin(firstRoadSegFromWorld.startPt, firstRoadSegFromWorld.endPt)
+
+    //returns point {x,y} relative to 0,0 origin
+    // rotateAboutOrigin(endPt, degrees)
+    let rotatedEndPtFromOrigin = this.rotateAboutOrigin({
+      x: startSegTranslatedToOrigin.endPt.x,
+      y: startSegTranslatedToOrigin.endPt.y
+    }, rotDegrees)
+
+    console.log("***", rotatedEndPtFromOrigin)
+
+    //this can be refactored by letting above return a seg instead of X,Y
+
+    let rotatedStartSegFromOrigin = {
+      startPt: {
+        x: 0,
+        y: 0,
+        z: 0
+      },
+      endPt: {
+        x: rotatedEndPtFromOrigin.x,
+        y: rotatedEndPtFromOrigin.y,
+        z: 0
+      }
+    }
 
 
+    //returns segment where offset is {x, y} to move seg to in world
+    // translateSegToWorld(seg, offset)
 
+    firstRoadSegFromWorld = this.translateSegToWorld(rotatedStartSegFromOrigin, {
+      x: firstRoadSegFromWorld.startPt.x,
+      y: firstRoadSegFromWorld.startPt.y
+    })
 
-
-
-    //translate it by it's startPt to mid point of constructor arg seg. args: seg to translate, point to translate it to
-    // let firstRoadSegFromWorld = this.translateSegToWorld(firstRoadSegFromOrigin, {
-    //   x: midPt.x,
-    //   y: midPt.y,
-    //   z: 0
-    // })
-
+    console.log("...", firstRoadSegFromWorld)
     //build first road seg
     this.vertsRoad = [firstRoadSegFromWorld.startPt.x, firstRoadSegFromWorld.startPt.y, 0, firstRoadSegFromWorld.endPt.x, firstRoadSegFromWorld.endPt.y, 0]
 
@@ -101,12 +112,14 @@ class Road {
 
     this.turnThresh = 0.0174533 * 90
   }
+
   scaleSegFromOrigin(seg, scale) {
     seg.endPt.x = seg.endPt.x * scale
     seg.endPt.y = seg.endPt.y * scale
 
     return seg
   }
+
   getSegMidPt(seg) {
     let x = (seg.startPt.x + seg.endPt.x) / 2
     let y = (seg.startPt.y + seg.endPt.y) / 2
@@ -189,7 +202,7 @@ class Road {
 
     //add transformed end point to vertsRoad
     this.numSegs++
-    this.vertsRoad.push(translatedEndPt.x)
+      this.vertsRoad.push(translatedEndPt.x)
     this.vertsRoad.push(translatedEndPt.y)
     this.vertsRoad.push(translatedEndPt.z)
   }
@@ -199,7 +212,7 @@ class Road {
     this.degrees = 5
 
     //set randomization factor of raod path generation by how close it is to start of road
-    let randomization = 0.5
+    let randomization = 0.25
     /*
     if(this.numSegs < 250) {
       randomization = .9

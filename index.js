@@ -41,30 +41,96 @@ scene.add(lineTile)
 
 let initialSpawnSeg = {
   startPt: {
-    x: -52000,
-    y: -52000,
+    x: -200000,
+    y: -200000,
     z: 0
   },
   endPt: {
-    x: 52000,
-    y: -52000,
+    x: 200000,
+    y: -200000,
     z: 0
   }
 }
 
 let spawnSeg = initialSpawnSeg
 
+
+
 let road = null
 let vertsRoad = null
 let prevRoadDir = "left"
-let numRoadsToBuild = 2
 
-while (numRoadsToBuild > 0) {
+
+//initiate a bunch of start points for roads
+let spawnSegs = []
+
+let boundaryRight = 104000
+let boundaryLeft = -104000
+let boundaryTop = 104000
+let boundaryBottom = -104000
+let spaceBtwn = 2000
+
+
+for (let iSegPtBtm = boundaryLeft+spaceBtwn; iSegPtBtm <= boundaryRight; iSegPtBtm += spaceBtwn) {
+  spawnSegs.push({
+      startPt: {
+        x: iSegPtBtm-spaceBtwn,
+        y: boundaryBottom,
+        z: 0
+      },
+      endPt: {
+        x: iSegPtBtm,
+        y: boundaryBottom,
+        z: 0
+      }
+    }
+  )
+}
+
+
+for (let iSegPtLeft = boundaryBottom + spaceBtwn; iSegPtLeft <= boundaryTop; iSegPtLeft += spaceBtwn) {
+  spawnSegs.push({
+      startPt: {
+        x: boundaryLeft,
+        y: iSegPtLeft-spaceBtwn,
+        z: 0
+      },
+      endPt: {
+        x: boundaryLeft,
+        y: iSegPtLeft,
+        z: 0
+      }
+    }
+  )
+}
+
+
+for (let iSegPtRight = boundaryBottom + spaceBtwn; iSegPtRight <= boundaryTop; iSegPtRight += spaceBtwn) {
+  spawnSegs.push({
+      startPt: {
+        x: boundaryRight,
+        y: iSegPtRight-spaceBtwn,
+        z: 0
+      },
+      endPt: {
+        x: boundaryRight,
+        y: iSegPtRight,
+        z: 0
+      }
+    }
+  )
+}
+
+
+console.log(spawnSegs)
+
+
+for (let i = 0; i < spawnSegs.length; i++) {
   //determine if new road is generally NS or EW by angle of spawnSeg
   if (prevRoadDir === "left") {
-    road = buildRoad(spawnSeg, -90, "right")
+    road = buildRoad(spawnSegs[i], -90, "right")
   } else {
-    road = buildRoad(spawnSeg, 90, "left")
+    road = buildRoad(spawnSegs[i], 90, "left")
   }
 
   // add road to scene
@@ -73,8 +139,8 @@ while (numRoadsToBuild > 0) {
 
   addLine(vertsRoad, matRoad)
 
-  //instead of doing this, you let the number of spawnSegs left in queue itterate the loop
-  numRoadsToBuild--
+
+
 }
 //build a road
 function buildRoad(spawnSeg, rot = 90, direction) {
@@ -82,25 +148,19 @@ function buildRoad(spawnSeg, rot = 90, direction) {
   let road = new Road(spawnSeg, rot, direction)
   let newRoadSeg
 
-  let boundaryRight = 52000
-  let boundaryLeft = -52000
-
-  let boundaryTop = 52000
-  let boundaryBottom = -52000
-
   // for (let i = 0; i < segs; i++) {
   let roadInBounds = true
-  while(roadInBounds) {
+  while (roadInBounds) {
     newRoadSeg = road.getNewRoadSeg()
     if (
       newRoadSeg.endPt.x > boundaryLeft &&
       newRoadSeg.endPt.x < boundaryRight &&
       newRoadSeg.endPt.y > boundaryBottom &&
       newRoadSeg.endPt.y < boundaryTop) {
-        road.addSeg(newRoadSeg)
-      } else {
-        roadInBounds = false
-      }
+      road.addSeg(newRoadSeg)
+    } else {
+      roadInBounds = false
+    }
 
   }
 
@@ -118,20 +178,25 @@ function addLine(verts, mat) {
 }
 
 // add grid to scene
-var geomGrid = new THREE.BufferGeometry();
-geomGrid.addAttribute('position', new THREE.BufferAttribute(vertsGrid32, 3));
-let lineGrid = new THREE.Line(geomGrid, matRoad)
-scene.add(lineGrid)
-
+// var geomGrid = new THREE.BufferGeometry();
+// geomGrid.addAttribute('position', new THREE.BufferAttribute(vertsGrid32, 3));
+// let lineGrid = new THREE.Line(geomGrid, matRoad)
+// scene.add(lineGrid)
 
 //establish camera location and camera target
 let deg = 0.0174533
 
-camera.position.x = 50000;
-camera.position.y = 0; // -52000 / 2; //-104000;
-camera.position.z = 150000;
+// camera.position.x = 0;
+// camera.position.y = 0; // -52000 / 2; //-104000;
+// camera.position.z = 50000;
+// camera.rotateX(deg * 0)
 
-camera.rotateX(deg * 0)
+camera.position.x = 0;
+camera.position.y = 0; // -52000 / 2; //-104000;
+camera.position.z = 2000;
+camera.rotateX(deg * 90)
+
+
 
 function animate() {
   requestAnimationFrame(animate);
