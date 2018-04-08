@@ -36,8 +36,8 @@ var matRoad = new THREE.LineBasicMaterial({
 });
 
 //feed the tile geometry, as a line, to the 3js scen object
-var lineTile = new THREE.Line(geomTile, matRoad);
-scene.add(lineTile)
+// var lineTile = new THREE.Line(geomTile, matRoad);
+// scene.add(lineTile)
 
 let initialSpawnSeg = {
   startPt: {
@@ -68,7 +68,7 @@ let boundaryRight = 104000
 let boundaryLeft = -104000
 let boundaryTop = 104000
 let boundaryBottom = -104000
-let spaceBtwn = 2000
+let spaceBtwn = 4000
 
 
 for (let iSegPtBtm = boundaryLeft+spaceBtwn; iSegPtBtm <= boundaryRight; iSegPtBtm += spaceBtwn) {
