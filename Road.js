@@ -209,10 +209,10 @@ class Road {
   determineBend(currentRdEndPtRelativeToOrigin) {
 
     this.mult = this.mult * (-1)
-    this.degrees = 5
+    this.degrees = 2.5
 
     //set randomization factor of raod path generation by how close it is to start of road
-    let randomization = 0.25
+    let randomization = 0.5
     /*
     if(this.numSegs < 250) {
       randomization = .9
@@ -221,6 +221,7 @@ class Road {
     }
     */
     if (Math.random() > randomization) {
+    // if (true) {
       return this.rotateRoadSegAboutOrigin(currentRdEndPtRelativeToOrigin, this.degrees * this.mult)
     } else {
       return currentRdEndPtRelativeToOrigin

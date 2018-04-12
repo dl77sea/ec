@@ -68,7 +68,7 @@ let boundaryRight = 104000
 let boundaryLeft = -104000
 let boundaryTop = 104000
 let boundaryBottom = -104000
-let spaceBtwn = 4000
+let spaceBtwn = 25000
 
 
 for (let iSegPtBtm = boundaryLeft+spaceBtwn; iSegPtBtm <= boundaryRight; iSegPtBtm += spaceBtwn) {
@@ -186,16 +186,15 @@ function addLine(verts, mat) {
 //establish camera location and camera target
 let deg = 0.0174533
 
-// camera.position.x = 0;
-// camera.position.y = 0; // -52000 / 2; //-104000;
-// camera.position.z = 50000;
-// camera.rotateX(deg * 0)
-
 camera.position.x = 0;
 camera.position.y = 0; // -52000 / 2; //-104000;
-camera.position.z = 2000;
-camera.rotateX(deg * 90)
+camera.position.z = 150000;
+camera.rotateX(deg * 0)
 
+// camera.position.x = 0;
+// camera.position.y = 0; // -52000 / 2; //-104000;
+// camera.position.z = 2000;
+// camera.rotateX(deg * 90)
 
 
 function animate() {
