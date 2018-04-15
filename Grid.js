@@ -12,6 +12,9 @@ class Grid {
       // linecap: 'round', //ignored by WebGLRenderer
       // linejoin:  'round' //ignored by WebGLRenderer
     });
+
+    //maintain info on what road segments are contained in each cell
+    this.roadCoords = []
   }
 
   getLine(startPt, endPt) {
@@ -20,6 +23,11 @@ class Grid {
     geom.addAttribute('position', new THREE.BufferAttribute(verts, 3))
     let line = new THREE.Line(geom, this.mat)
     return line
+  }
+
+  //populate the grid with a road coordinates
+  addRoad() {
+
   }
 
   getGrid() {

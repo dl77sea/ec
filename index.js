@@ -22,6 +22,14 @@ for(line of gridLines) {
   scene.add(line)
 }
 
+//direction, gridCellX, gridCellY, edge
+let road = new Road("left", -3, -10, "bottom")
+scene.add(road.getRoad())
+
+
+
+
+
 let deg = 0.0174533
 
 camera.position.x = 0;
