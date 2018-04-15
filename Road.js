@@ -9,7 +9,7 @@ class Road {
     this.boundsMax = this.gridMax * grid.gridCellDist
     console.log("min max: ", this.gridMin, this.gridMax)
     this.gridCellDist = grid.gridCellDist
-    this.gridCellDistHalf = grid.gridCellDist/2
+    this.gridCellDistHalf = grid.gridCellDist / 2
 
     this.gridCellX = gridCellX
     this.gridCellY = gridCellY
@@ -24,6 +24,15 @@ class Road {
     }
     console.log(this.dirMult)
     console.log(this.gridMin, this.gridMax)
+
+    this.mat = new THREE.LineBasicMaterial({
+      color: 0x00ffff,
+      linewidth: 3
+      // linecap: 'round', //ignored by WebGLRenderer
+      // linejoin:  'round' //ignored by WebGLRenderer
+    });
+
+
   }
 
   getLine(startPt, endPt) {
@@ -35,43 +44,42 @@ class Road {
   }
 
   getNextEndPt(prvSegStartPt, prvSegEndPt) {
-    console.log("snarf: ", prvSegStartPt, prvSegEndPt)
+    // console.log("snarf: ", prvSegStartPt, prvSegEndPt)
     //check if prev seg was straight up and down ("UD"), straight left and right("LR") or 45("45")
     let prvSegDir
     if (prvSegEndPt.x === prvSegStartPt.x) {
-      console.log("a")
+      // console.log("a")
       prvSegDir = "UD"
     } else if (prvSegEndPt.y === prvSegStartPt.y) {
-      console.log("b")
+      // console.log("b")
       prvSegDir = "LR"
     } else {
-      console.log("c")
+      // console.log("c")
       prvSegDir = "45"
     }
-    console.log("prvSegDir: ", prvSegDir)
+    // console.log("prvSegDir: ", prvSegDir)
     let newEndPt
-    if (prvSegDir === "UD" || prvSegDir === "45") {
+    if (prvSegDir === "UD") {
       //continue UD or 45
       if (Math.random() > 0.5) {
         //UD
-        console.log("UpDown", prvSegEndPt)
+        console.log("UD, prvSegDir: ", prvSegDir)
         newEndPt = {
           x: prvSegEndPt.x,
           y: prvSegEndPt.y + this.gridCellDistHalf,
           z: 0
         }
-        console.log("!!!",newEndPt)
       } else {
         //45
-        console.log("FortyFive")
+        console.log("45, prvSegDir: ", prvSegDir)
         newEndPt = {
-          x: prvSegEndPt.x + this.gridCellDistHalf*this.dirMult,
+          x: prvSegEndPt.x + this.gridCellDistHalf * this.dirMult,
           y: prvSegEndPt.y + this.gridCellDistHalf,
           z: 0
         }
       }
     }
-    if (prvSegDir === "LR" || prvSegDir === "45") {
+    if (prvSegDir === "LR") {
       //continue LR or go either 45
       if (Math.random() > 0.5) {
         //LR
@@ -83,12 +91,41 @@ class Road {
       } else {
         //45
         newEndPt = {
-          x: prvSegEndPt.x + this.gridCellDistHalf*this.dirMult,
+          x: prvSegEndPt.x + this.gridCellDistHalf * this.dirMult,
           y: prvSegEndPt.y + this.gridCellDistHalf,
           z: 0
         }
       }
     }
+
+    if (prvSegDir === "45") {
+      //continue LR or go either 45
+      if (Math.random() > 0.5) {
+        if (Math.random() > 0.5) {
+          //LR
+          newEndPt = {
+            x: prvSegEndPt.x + this.gridCellDistHalf * this.dirMult,
+            y: prvSegEndPt.y,
+            z: 0
+          }
+        } else {
+          //UD
+          newEndPt = {
+            x: prvSegEndPt.x,
+            y: prvSegEndPt.y + this.gridCellDistHalf,
+            z: 0
+          }
+        }
+      } else {
+        //45
+        newEndPt = {
+          x: prvSegEndPt.x + this.gridCellDistHalf * this.dirMult,
+          y: prvSegEndPt.y + this.gridCellDistHalf,
+          z: 0
+        }
+      }
+    }
+
 
     return newEndPt
   }
@@ -112,8 +149,8 @@ class Road {
     ]
 
     while (edgeReached === false) {
-    // let i = 0
-    // while (i < 2) {
+      // let i = 0
+      // while (i < 2) {
       // i++
 
       let prvSegEndPt = {
@@ -129,20 +166,16 @@ class Road {
 
       let newPt
 
-      if (this.edge === "bottom") {
-        newPt = this.getNextEndPt(prvSegStartPt, prvSegEndPt)
-      }
+      newPt = this.getNextEndPt(prvSegStartPt, prvSegEndPt)
+
       verts.push(newPt.x, newPt.y, newPt.z)
-      console.log("newPt: ", newPt)
       if (
         newPt.x >= this.boundsMax ||
         newPt.x <= this.boundsMin ||
-        newPt.y >= this.boundsMax ) {
-        console.log("end happened"
-      )
+        newPt.y >= this.boundsMax) {
+
         edgeReached = true
       }
-      console.log(verts)
     }
     return verts
   }

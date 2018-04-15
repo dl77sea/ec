@@ -21,12 +21,29 @@ let gridLines = grid.getGrid()
 for(line of gridLines) {
   scene.add(line)
 }
-
 //direction, gridCellX, gridCellY, edge
-let road = new Road("left", -3, -10, "bottom")
-scene.add(road.getRoad())
-
-
+let road1 = new Road("left", -10, -10, "bottom")
+scene.add(road1.getRoad())
+let road2 = new Road("right", -8, -10, "bottom")
+scene.add(road2.getRoad())
+let road3 = new Road("left", -6, -10, "bottom")
+scene.add(road3.getRoad())
+let road4 = new Road("right", -4, -10, "bottom")
+scene.add(road4.getRoad())
+let road5 = new Road("left", -2, -10, "bottom")
+scene.add(road5.getRoad())
+let road6 = new Road("right", 0, -10, "bottom")
+scene.add(road6.getRoad())
+let road7 = new Road("left", 2, -10, "bottom")
+scene.add(road7.getRoad())
+let road8 = new Road("right", 4, -10, "bottom")
+scene.add(road8.getRoad())
+let road9 = new Road("left", 6, -10, "bottom")
+scene.add(road9.getRoad())
+let road10 = new Road("right", 8, -10, "bottom")
+scene.add(road10.getRoad())
+let road11 = new Road("left", 10, -10, "bottom")
+scene.add(road11.getRoad())
 
 
 

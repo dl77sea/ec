@@ -7,7 +7,7 @@ class Grid {
     this.gridLines = []
 
     this.mat = new THREE.LineBasicMaterial({
-      color: 0x00ffff,
+      color: 0x222222,
       linewidth: 3
       // linecap: 'round', //ignored by WebGLRenderer
       // linejoin:  'round' //ignored by WebGLRenderer
