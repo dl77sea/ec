@@ -9,6 +9,7 @@ class Road {
     this.boundsMax = this.gridMax * grid.gridCellDist
     console.log("min max: ", this.gridMin, this.gridMax)
     this.gridCellDist = grid.gridCellDist
+    this.gridCellDistHalf = grid.gridCellDist/2
 
     this.gridCellX = gridCellX
     this.gridCellY = gridCellY
@@ -56,7 +57,7 @@ class Road {
         console.log("UpDown", prvSegEndPt)
         newEndPt = {
           x: prvSegEndPt.x,
-          y: prvSegEndPt.y + this.gridCellDist,
+          y: prvSegEndPt.y + this.gridCellDistHalf,
           z: 0
         }
         console.log("!!!",newEndPt)
@@ -64,8 +65,8 @@ class Road {
         //45
         console.log("FortyFive")
         newEndPt = {
-          x: prvSegEndPt.x + this.gridCellDist*this.dirMult,
-          y: prvSegEndPt.y + this.gridCellDist,
+          x: prvSegEndPt.x + this.gridCellDistHalf*this.dirMult,
+          y: prvSegEndPt.y + this.gridCellDistHalf,
           z: 0
         }
       }
@@ -75,15 +76,15 @@ class Road {
       if (Math.random() > 0.5) {
         //LR
         newEndPt = {
-          x: prvSegEndPt.x + this.gridCellDist * this.dirMult,
+          x: prvSegEndPt.x + this.gridCellDistHalf * this.dirMult,
           y: prvSegEndPt.y,
           z: 0
         }
       } else {
         //45
         newEndPt = {
-          x: prvSegEndPt.x + this.gridCellDist*this.dirMult,
-          y: prvSegEndPt.y + this.gridCellDist,
+          x: prvSegEndPt.x + this.gridCellDistHalf*this.dirMult,
+          y: prvSegEndPt.y + this.gridCellDistHalf,
           z: 0
         }
       }
@@ -137,7 +138,8 @@ class Road {
         newPt.x >= this.boundsMax ||
         newPt.x <= this.boundsMin ||
         newPt.y >= this.boundsMax ) {
-        console.log("end happened")
+        console.log("end happened"
+      )
         edgeReached = true
       }
       console.log(verts)
