@@ -47,16 +47,15 @@ scene.add(road9.getRoad())
 
 let deg = 0.0174533
 
-camera.position.x = 0;
-camera.position.y = 0; // -52000 / 2; //-104000;
-camera.position.z = 150000;
-camera.rotateX(deg * 0)
-
 // camera.position.x = 0;
 // camera.position.y = 0; // -52000 / 2; //-104000;
-// camera.position.z = 2000;
-// camera.rotateX(deg * 90)
-//
+// camera.position.z = 150000;
+// camera.rotateX(deg * 0)
+
+camera.position.x = 0;
+camera.position.y = 0; // -52000 / 2; //-104000;
+camera.position.z = 2000;
+camera.rotateX(deg * 90)
 
 function animate() {
   requestAnimationFrame(animate);
