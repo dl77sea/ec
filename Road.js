@@ -1,5 +1,5 @@
 class Road {
-  constructor(direction, gridCellX, gridCellY, edge) {
+  constructor(direction, gridCellX, gridCellY) {
     this.vertsRoad = []
 
     let grid = new Grid()
@@ -14,7 +14,7 @@ class Road {
     this.gridCellX = gridCellX
     this.gridCellY = gridCellY
     this.direction = direction
-    this.edge = edge
+
     this.dirMult = null
 
     if (this.direction === "left") {
@@ -137,16 +137,43 @@ class Road {
     console.log("f", currentGridCellX, currentGridCellY)
 
     let edgeReached = false
-    let verts = [
-      //first vertex
-      currentGridCellX * this.gridCellDist + this.gridCellDist / 2,
-      this.gridMin * this.gridCellDist,
-      0,
-      //second vertex
-      currentGridCellX * this.gridCellDist + this.gridCellDist / 2,
-      (this.gridMin + 1) * this.gridCellDist,
-      0
-    ]
+    let verts
+    if (this.gridCellY === -10) {
+      verts = [
+        //first vertex
+        currentGridCellX * this.gridCellDist + this.gridCellDist / 2,
+        this.gridMin * this.gridCellDist,
+        0,
+        //second vertex
+        currentGridCellX * this.gridCellDist + this.gridCellDist / 2,
+        (this.gridMin + 1) * this.gridCellDist,
+        0
+      ]
+    }
+    if (this.gridCellX === 10) {
+      verts = [
+        //first vertex
+        this.boundsMax,
+        this.gridCellY * this.gridCellDist + this.gridCellDist / 2,
+        0,
+        //second vertex
+        this.boundsMax-this.gridCellDist,
+        this.gridCellY * this.gridCellDist + this.gridCellDist / 2,
+        0,
+      ]
+    }
+    if (this.gridCellX === -10) {
+      verts = [
+        //first vertex
+        this.boundsMin,
+        this.gridCellY * this.gridCellDist + this.gridCellDist / 2,
+        0,
+        //second vertex
+        this.boundsMin+this.gridCellDist,
+        this.gridCellY * this.gridCellDist + this.gridCellDist / 2,
+        0,
+      ]
+    }
 
     while (edgeReached === false) {
       // let i = 0
