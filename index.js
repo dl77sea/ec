@@ -22,40 +22,49 @@ for(line of gridLines) {
   scene.add(line)
 }
 //direction, gridCellX, gridCellY, edge
-let road1 = new Road("right", -10, 7)
-scene.add(road1.getRoad())
-let road2 = new Road("right", -10, 0)
-scene.add(road2.getRoad())
-let road3 = new Road("right", -10, -7)
-scene.add(road3.getRoad())
-
-let road4 = new Road("left", 10, 7)
-scene.add(road4.getRoad())
-let road5 = new Road("left", 10, 0)
-scene.add(road5.getRoad())
-let road6 = new Road("left", 10, -7)
-scene.add(road6.getRoad())
-
-let road7 = new Road("right", -7, -10)
-scene.add(road7.getRoad())
-let road8 = new Road("left", -0, -10)
-scene.add(road8.getRoad())
+// let road1 = new Road("right", -10, 7)
+// scene.add(road1.getRoad())
+// let road2 = new Road("right", -10, 0)
+// scene.add(road2.getRoad())
+// let road3 = new Road("right", -10, -7)
+// scene.add(road3.getRoad())
+//
+// let road4 = new Road("left", 10, 7)
+// scene.add(road4.getRoad())
+// let road5 = new Road("left", 10, 0)
+// scene.add(road5.getRoad())
+// let road6 = new Road("left", 10, -7)
+// scene.add(road6.getRoad())
+//
+// let road7 = new Road("right", -7, -10)
+// scene.add(road7.getRoad())
+// let road8 = new Road("left", -0, -10)
+// scene.add(road8.getRoad())
 let road9 = new Road("left", 7, -10)
 scene.add(road9.getRoad())
+
+//  build grid (80x80) array to help track transitions in hw network
+//  store highway segment directions as:
+//  vertical segment    (right edge): 0
+//  horizontal segment  (bottom edge): 1
+//  45  degree segment: 2
+//  135 degree segment: 3
+// console.log("road9.verts",road9.verts)
+console.log(grid.addRoad(road9.verts))
 
 
 
 let deg = 0.0174533
 
-// camera.position.x = 0;
-// camera.position.y = 0; // -52000 / 2; //-104000;
-// camera.position.z = 150000;
-// camera.rotateX(deg * 0)
-
 camera.position.x = 0;
 camera.position.y = 0; // -52000 / 2; //-104000;
-camera.position.z = 2000;
-camera.rotateX(deg * 90)
+camera.position.z = 150000;
+camera.rotateX(deg * 0)
+
+// camera.position.x = 0;
+// camera.position.y = 0; // -52000 / 2; //-104000;
+// camera.position.z = 2000;
+// camera.rotateX(deg * 90)
 
 function animate() {
   requestAnimationFrame(animate);

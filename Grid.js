@@ -12,7 +12,7 @@ class Grid {
       // linecap: 'round', //ignored by WebGLRenderer
       // linejoin:  'round' //ignored by WebGLRenderer
     });
-
+    this.numRoads = 0
     //maintain info on what road segments are contained in each cell
     this.roadCoords = []
   }
@@ -27,7 +27,7 @@ class Grid {
 
   //populate the grid with a road coordinates
   addRoad() {
-
+    this.numRoads++
   }
 
   getGrid() {
@@ -63,4 +63,18 @@ class Grid {
     }
     return this.gridLines
   }
+
+  //  vertical segment    (right edge): 0
+  //  horizontal segment  (bottom edge): 1
+  //  45  degree segment: 2
+  //  135 degree segment: 3
+  addRoad(verts) {
+    console.log("---")
+    for (let i = 0; i < verts.length; i += 3) {
+      console.log(verts[i + 0])
+      console.log(verts[i + 1])
+      console.log(verts[i + 2])
+    }
+  }
+
 }
