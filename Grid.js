@@ -212,7 +212,7 @@ class Grid {
   }
 
   plotDot(cenX,cenY,color) {
-    var geometry = new THREE.CircleGeometry( 5, 32 );
+    var geometry = new THREE.CircleGeometry( 1, 32 );
     var material = new THREE.MeshBasicMaterial( { color: color } );
     var circle = new THREE.Mesh( geometry, material );
 
@@ -247,13 +247,11 @@ class Grid {
       lr: [0xff00ff, 0xaaaaaa]
     }
     for(let i=0; i < grid.length; i++) {
-      // console.log(gridSquare)
       //get translated plotting coordinates from index into map grid
-      // let y = (Math.floor(i/this.testGridNumCells)*this.testGridNumCells) * this.testGridCellDist + this.testGridCellDist/2
 
-      let y = (Math.floor(i/this.testGridNumCells)*this.testGridNumCells) + this.testGridCellDist/2
-      // let x = (i - (Math.floor(i/this.testGridNumCells)*this.testGridNumCells)) + this.testGridCellDist/2
       let x = (i - (Math.floor(i/this.testGridNumCells)*this.testGridNumCells)) * this.testGridCellDist + this.testGridCellDist/2
+      let y = (Math.floor(i/this.testGridNumCells)*this.testGridCellDist) + this.testGridCellDist/2
+
       console.log(x,y)
 
       //figure out which tiles to plot for each gridSquare:
