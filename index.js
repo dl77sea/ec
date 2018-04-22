@@ -40,8 +40,10 @@ for(line of gridLines) {
 // scene.add(road7.getRoad())
 // let road8 = new Road("left", -0, -10)
 // scene.add(road8.getRoad())
+
 let road9 = new Road("left", 7, -10)
 scene.add(road9.getRoad())
+
 
 //  build grid (80x80) array to help track transitions in hw network
 //  store highway segment directions as:
@@ -50,7 +52,32 @@ scene.add(road9.getRoad())
 //  45  degree segment: 2
 //  135 degree segment: 3
 // console.log("road9.verts",road9.verts)
-console.log(grid.addRoad(road9.verts))
+let testVertsRoad1 = [
+  -20,-40,0,
+  -20,-20,0,
+  -20,0,0,
+  0,20,0,
+  20,40,0
+]
+let testVertsRoad2 = [
+  40,-40,0,
+  20,-20,0,
+  20,0,0,
+  0,20,0,
+  0,40,0
+]
+
+let testVertsRoad3 = [
+  0,-40,0,
+  -20,-20,0,
+  -20,0,0,
+  0,20,0,
+  0,40,0
+]
+// grid.addRoad(road9.verts)
+scene.add(road9.getRoad(testVertsRoad3))
+
+grid.addRoad(testVertsRoad3)
 
 
 
@@ -58,7 +85,7 @@ let deg = 0.0174533
 
 camera.position.x = 0;
 camera.position.y = 0; // -52000 / 2; //-104000;
-camera.position.z = 150000;
+camera.position.z = 150;
 camera.rotateX(deg * 0)
 
 // camera.position.x = 0;

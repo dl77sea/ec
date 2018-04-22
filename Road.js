@@ -216,5 +216,13 @@ class Road {
     return line
   }
 
+  testGetRoad(verts) {
+    this.verts = verts
+    let verts32 = new Float32Array(verts)
+    let geom = new THREE.BufferGeometry()
+    geom.addAttribute('position', new THREE.BufferAttribute(verts32, 3))
+    let line = new THREE.Line(geom, this.mat)
+    return line
+  }
 
 }
