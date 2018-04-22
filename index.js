@@ -72,14 +72,19 @@ let testVertsRoad3 = [
   -20,-20,0,
   -20,0,0,
   0,20,0,
-  0,40,0
+  20,20,0,
+  40,20,0
 ]
 // grid.addRoad(road9.verts)
 scene.add(road9.getRoad(testVertsRoad3))
 
 grid.addRoad(testVertsRoad3)
 
+let gridMap = grid.testMap
 
+console.log(gridMap)
+
+grid.testPlotTiles(gridMap)
 
 let deg = 0.0174533
 

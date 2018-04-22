@@ -187,8 +187,8 @@ class Grid {
       }
       //horizontal
       if (transStartY === transEndY) {
-        this.testMap[iY + iX - this.testGridNumCells].hrz = true
-        this.testMap[iY + iX].hrz = true
+        this.testMap[iY + iX + 1].hrz = true
+        this.testMap[iY + iX + 2].hrz = true
       }
       //diagonal
 
@@ -208,14 +208,63 @@ class Grid {
           this.testMap[iY + iX].dgl = true
         }
       }
+    }
+  }
+
+  plotDot(cenX,cenY,color) {
+    var geometry = new THREE.CircleGeometry( 5, 32 );
+    var material = new THREE.MeshBasicMaterial( { color: color } );
+    var circle = new THREE.Mesh( geometry, material );
+
+    circle.position.x = cenX
+    circle.position.y = cenY
+
+    scene.add( circle );
+  }
+  // put a color dot on each grid square on map representing tile
+  testPlotTiles(grid) {
+    let color = 0xffff00
+    this.plotDot(3,-3,color)
+    // red: triangle upper left diagonal (dul)
+    // orange: triangle upper right diagonal (dur)
+    // yellow: triangle lower left diagonal (dll)
+    // magenta: triangle upper right diagonal (dlr)
 
 
-      // this.testMap.push()
+    // blue: triangle upper left straight (sul)
+    // cyan: triangle upper right straight (sur)
+    // green: triangle lower left straight (sll)
+    // grey: triangle lower right straight (slr)
+
+    //set orientation mode: 0 = 45 degrees, 1 = 90 degrees
+    //(as long as no segments found in gridSquare, orientation does not change)
+    let orientationMode = 0
+    //[45deg ref, 90deg ref]
+    let tileRefs = {
+      ul: [0xff0000, 0x0000ff],
+      ur: [0xff8833, 0x00ffff],
+      ll: [0xffff00, 0x00ff00],
+      lr: [0xff00ff, 0xaaaaaa]
+    }
+    for(let i=0; i < grid.length; i++) {
+      // console.log(gridSquare)
+      //get translated plotting coordinates from index into map grid
+      // let y = (Math.floor(i/this.testGridNumCells)*this.testGridNumCells) * this.testGridCellDist + this.testGridCellDist/2
+
+      let y = (Math.floor(i/this.testGridNumCells)*this.testGridNumCells) + this.testGridCellDist/2
+      // let x = (i - (Math.floor(i/this.testGridNumCells)*this.testGridNumCells)) + this.testGridCellDist/2
+      let x = (i - (Math.floor(i/this.testGridNumCells)*this.testGridNumCells)) * this.testGridCellDist + this.testGridCellDist/2
+      console.log(x,y)
+
+      //figure out which tiles to plot for each gridSquare:
+      if (!(grid[i].vrt && grid[i].hrz && grid[i].dgl && grid[i].dgr)) {
+        //grid suqare is empty, so populate with upper right and lower left of current orientation mode
+        this.plotDot(x,y,0xff0000)
+      }
 
 
-
+      //if gridSquare empty, do square (ll/ur of square) of current orientation mode
 
     }
-    console.log("testMap: ", this.testMap, this.happened)
   }
 }
