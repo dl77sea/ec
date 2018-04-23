@@ -62,11 +62,10 @@ let testVertsRoad1 = [
 let testVertsRoad2 = [
   40,-40,0,
   20,-20,0,
-  20,0,0,
-  0,20,0,
-  0,40,0
+  0,0,0,
+  -20,20,0,
+  -40,40,0
 ]
-
 let testVertsRoad3 = [
   0,-40,0,
   -20,-20,0,
@@ -75,11 +74,20 @@ let testVertsRoad3 = [
   20,20,0,
   40,20,0
 ]
+let testVertsRoad4 = [
+  40,-40,0,
+  20,-20,0,
+  20,0,0,
+  0,20,0,
+  0,40,0
+]
+
 // grid.addRoad(road9.verts)
-scene.add(road9.getRoad(testVertsRoad3))
 
-grid.addRoad(testVertsRoad3)
-
+scene.add(road9.getRoad(testVertsRoad1))
+scene.add(road9.getRoad(testVertsRoad2))
+grid.addRoad(testVertsRoad1)
+grid.addRoad(testVertsRoad2)
 let gridMap = grid.testMap
 
 console.log(gridMap)
