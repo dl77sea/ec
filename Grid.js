@@ -40,7 +40,9 @@ class Grid {
         vrt: false,
         hrz: false,
         dgr: false,
-        dgl: false
+        dgl: false,
+        //set to value of lower part of tile to be used as reference when determining orientation mode on starting filling of new row: 0 = 45degrees, 1 = 90degrees
+        orientationMode: 0
       })
     }
 
@@ -98,7 +100,7 @@ class Grid {
       gridLine = this.getLine(startPt, endPt)
       this.gridLines.push(gridLine)
     }
-    console.log ("gridlines: ", this.gridLines)
+    console.log("gridlines: ", this.gridLines)
     return this.gridLines
   }
 
@@ -175,8 +177,8 @@ class Grid {
       //for each segment, update cell values in map array...
       let iX = (transStartX / this.testGridCellDist) - 1
       let iY = (this.testGridNumCells * this.testGridNumCells) - ((transStartY / this.testGridCellDist) * this.testGridNumCells) - this.testGridNumCells
-      console.log ("iX: ", iX)
-      console.log ("iY: ", iY)
+      console.log("iX: ", iX)
+      console.log("iY: ", iY)
 
       //vertical
       if (transStartX === transEndX) {
@@ -187,8 +189,8 @@ class Grid {
       }
       //horizontal
       if (transStartY === transEndY) {
-        this.testMap[iY + iX + 1].hrz = true
-        this.testMap[iY + iX + 2].hrz = true
+        this.testMap[iY + iX + 1 + this.testGridNumCells].hrz = true
+        this.testMap[iY + iX + 2 + this.testGridNumCells].hrz = true
       }
       //diagonal
 
@@ -196,7 +198,7 @@ class Grid {
 
         //diagonal up and right
         if (transEndX > transStartX) {
-          this.happened+=1
+          this.happened += 1
           //go one over to right from index,
           //then subtract gridNumCells
           //to mark cell representing upper part of diagonal
@@ -211,24 +213,33 @@ class Grid {
     }
   }
 
-  plotDot(cenX,cenY,color) {
-    var geometry = new THREE.CircleGeometry( 1, 32 );
-    var material = new THREE.MeshBasicMaterial( { color: color } );
-    var circle = new THREE.Mesh( geometry, material );
+  plotDot(cenX, cenY, color) {
+    var geometry = new THREE.CircleGeometry(1, 32);
+    var material = new THREE.MeshBasicMaterial({
+      color: color
+    });
+    var circle = new THREE.Mesh(geometry, material);
 
     circle.position.x = cenX
     circle.position.y = cenY
 
-    scene.add( circle );
+    scene.add(circle);
   }
   // put a color dot on each grid square on map representing tile
   testPlotTiles(grid) {
+    function changeOrientationMode() {
+      if (orientationMode === 0) {
+        orientationMode = 1
+      } else {
+        orientationMode = 0
+      }
+    }
     let color = 0xffff00
-    this.plotDot(3,-3,color)
+    this.plotDot(3, -3, color)
     // red: triangle upper left diagonal (dul)
     // orange: triangle upper right diagonal (dur)
     // yellow: triangle lower left diagonal (dll)
-    // magenta: triangle upper right diagonal (dlr)
+    // magenta: triangle lower right diagonal (dlr)
 
 
     // blue: triangle upper left straight (sul)
@@ -247,21 +258,70 @@ class Grid {
       lr: [0xff00ff, 0xaaaaaa]
     }
     console.log(grid)
-    for(let i=0; i < grid.length; i++) {
+    for (let i = 0; i < grid.length; i++) {
       //get map coordinates center for each grid square
-      let x = (i - (Math.floor(i/this.testGridNumCells)*this.testGridNumCells)) * this.testGridCellDist + this.testGridCellDist/2
-      let y = ((this.testGridNumCells-1) - Math.floor(i/this.testGridNumCells))
-      * this.testGridCellDist + this.testGridCellDist/2
-      console.log(x,y)
+      let x = (i - (Math.floor(i / this.testGridNumCells) * this.testGridNumCells)) * this.testGridCellDist + this.testGridCellDist / 2
+      let y = ((this.testGridNumCells - 1) - Math.floor(i / this.testGridNumCells)) * this.testGridCellDist + this.testGridCellDist / 2
+      // console.log(x, y)
+      //translate  cen of each map grid square into world space
+      x = x - this.testGridCellDist * (this.testGridNumCells / 2)
+      y = y - this.testGridCellDist * (this.testGridNumCells / 2)
 
-      //figure out which tiles to plot for each gridSquare:
-      if (grid[i].vrt === false && grid[i].hrz === false && grid[i].dgl === false && grid[i].dgr === false) {
-        //grid suqare is empty, so populate with upper right and lower left of current orientation mode
-        this.plotDot(x,y,0xff0000)
+      //determine orientation mode
+      //if not on first tile,
+      if(i !== 0) {
+
+        //make sure filling with same orientation mode
+        //as loewer part of tile above, when starting to fill new row
+        if(i%this.testGridNumCells === 0) {
+          if(grid[i-this.testGridNumCells].hrz || grid[i-this.testGridNumCells].dgl || grid[i-this.testGridNumCells].dgr) {
+            //above is a road, so alternate orientation
+            changeOrientationMode()
+          } else {
+            //above is contiguous so make sure current orientation mode stays same as above
+            orientationMode = grid[i-this.testGridNumCells].orientationMode
+          }
+        }
       }
 
+      //figure out which tiles to plot for each gridSquare:
 
-      //if gridSquare empty, do square (ll/ur of square) of current orientation mode
+      //grid suqare is empty, so populate with upper right and lower left of current orientation mode
+      if (grid[i].vrt === false && grid[i].hrz === false && grid[i].dgl === false && grid[i].dgr === false) {
+        this.plotDot(x + 2.5, y + 2.55, tileRefs.ll[orientationMode])
+        this.plotDot(x - 2.5, y - 2.55, tileRefs.ur[orientationMode])
+      }
+
+      //with hrz or vrt, no diagonals
+      if ((grid[i].vrt || grid[i].hrz) && grid[i].dgl === false && grid[i].dgr === false) {
+        this.plotDot(x + 2.5, y + 2.55, tileRefs.ll[orientationMode])
+        this.plotDot(x - 2.5, y - 2.55, tileRefs.ur[orientationMode])
+        if(grid[i].vrt)
+          changeOrientationMode()
+      }
+
+      //if diagonal
+      if (grid[i].dgl || grid[i].dgr) {
+        if (grid[i].dgl) {
+          this.plotDot(x - 2.5, y - 2.55, tileRefs.ur[orientationMode])
+          changeOrientationMode()
+          this.plotDot(x + 2.5, y + 2.55, tileRefs.ll[orientationMode])
+        }
+        if (grid[i].dgr) {
+          this.plotDot(x - 2.5, y + 2.55, tileRefs.lr[orientationMode])
+          changeOrientationMode()
+          this.plotDot(x + 2.5, y - 2.55, tileRefs.ul[orientationMode])
+        }
+
+      }
+
+      // console.log(i%this.testGridNumCells)
+      // if(i%this.testGridNumCells === 0) {
+        // console.log(i-this.testGridNumCells)
+        // if(grid[i])
+      // }
+      // if( (i - (Math.floor(i / this.testGridNumCells))) === 8 )
+        // changeOrientationMode()
 
     }
   }
