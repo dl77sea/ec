@@ -246,16 +246,16 @@ class Grid {
       ll: [0xffff00, 0x00ff00],
       lr: [0xff00ff, 0xaaaaaa]
     }
+    console.log(grid)
     for(let i=0; i < grid.length; i++) {
-      //get translated plotting coordinates from index into map grid
-
+      //get map coordinates center for each grid square
       let x = (i - (Math.floor(i/this.testGridNumCells)*this.testGridNumCells)) * this.testGridCellDist + this.testGridCellDist/2
-      let y = (Math.floor(i/this.testGridNumCells)*this.testGridCellDist) + this.testGridCellDist/2
-
+      let y = ((this.testGridNumCells-1) - Math.floor(i/this.testGridNumCells))
+      * this.testGridCellDist + this.testGridCellDist/2
       console.log(x,y)
 
       //figure out which tiles to plot for each gridSquare:
-      if (!(grid[i].vrt && grid[i].hrz && grid[i].dgl && grid[i].dgr)) {
+      if (grid[i].vrt === false && grid[i].hrz === false && grid[i].dgl === false && grid[i].dgr === false) {
         //grid suqare is empty, so populate with upper right and lower left of current orientation mode
         this.plotDot(x,y,0xff0000)
       }
