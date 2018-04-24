@@ -234,14 +234,24 @@ class Grid {
         orientationMode = 0
       }
     }
+
+    function getOppositeOrientationMode(orientationMode) {
+      if (orientationMode === 0) {
+        return 1
+      } else {
+        return 0
+      }
+    }
+
     let color = 0xffff00
     this.plotDot(3, -3, color)
+    // 0;
     // red: triangle upper left diagonal (dul)
     // orange: triangle upper right diagonal (dur)
     // yellow: triangle lower left diagonal (dll)
     // magenta: triangle lower right diagonal (dlr)
 
-
+    // 1;
     // blue: triangle upper left straight (sul)
     // cyan: triangle upper right straight (sur)
     // green: triangle lower left straight (sll)
@@ -269,17 +279,22 @@ class Grid {
 
       //determine orientation mode
       //if not on first tile,
-      if(i !== 0) {
-
+      if (i !== 0) {
+        // console.log("h1", i)
         //make sure filling with same orientation mode
         //as loewer part of tile above, when starting to fill new row
-        if(i%this.testGridNumCells === 0) {
-          if(grid[i-this.testGridNumCells].hrz || grid[i-this.testGridNumCells].dgl || grid[i-this.testGridNumCells].dgr) {
-            //above is a road, so alternate orientation
-            changeOrientationMode()
-          } else {
-            //above is contiguous so make sure current orientation mode stays same as above
-            orientationMode = grid[i-this.testGridNumCells].orientationMode
+        if (i % this.testGridNumCells === 0) {
+          // console.log("happened")
+          // orientationMode = getOppositeOrientationMode(grid[i - 1])
+          // if (grid[i - 1].dgr || grid[i - 1].dgl) {
+          // console.log("diag")
+          // } else {
+          if (grid[i - 1].dgr === false && grid[i - 1].dgl === false) {
+            if (grid[i].hrz === false) {
+              orientationMode = grid[i - this.testGridNumCells].orientationMode
+            } else {
+              orientationMode = getOppositeOrientationMode(grid[i - this.testGridNumCells].orientationMode)
+            }
           }
         }
       }
@@ -290,14 +305,24 @@ class Grid {
       if (grid[i].vrt === false && grid[i].hrz === false && grid[i].dgl === false && grid[i].dgr === false) {
         this.plotDot(x + 2.5, y + 2.55, tileRefs.ll[orientationMode])
         this.plotDot(x - 2.5, y - 2.55, tileRefs.ur[orientationMode])
+        grid[i].orientationMode = orientationMode
       }
 
       //with hrz or vrt, no diagonals
       if ((grid[i].vrt || grid[i].hrz) && grid[i].dgl === false && grid[i].dgr === false) {
-        this.plotDot(x + 2.5, y + 2.55, tileRefs.ll[orientationMode])
-        this.plotDot(x - 2.5, y - 2.55, tileRefs.ur[orientationMode])
-        if(grid[i].vrt)
+
+        if (grid[i].vrt) {
+          this.plotDot(x + 2.5, y + 2.55, tileRefs.ll[orientationMode])
+          this.plotDot(x - 2.5, y - 2.55, tileRefs.ur[orientationMode])
+          grid[i].orientationMode = orientationMode
           changeOrientationMode()
+        }
+        if (grid[i].hrz) {
+          orientationMode = getOppositeOrientationMode(grid[i - this.testGridNumCells].orientationMode)
+          this.plotDot(x + 2.5, y + 2.55, tileRefs.ll[orientationMode])
+          this.plotDot(x - 2.5, y - 2.55, tileRefs.ur[orientationMode])
+          grid[i].orientationMode = orientationMode
+        }
       }
 
       //if diagonal
@@ -306,23 +331,24 @@ class Grid {
           this.plotDot(x - 2.5, y - 2.55, tileRefs.ur[orientationMode])
           changeOrientationMode()
           this.plotDot(x + 2.5, y + 2.55, tileRefs.ll[orientationMode])
+          grid[i].orientationMode = orientationMode
         }
         if (grid[i].dgr) {
           this.plotDot(x - 2.5, y + 2.55, tileRefs.lr[orientationMode])
+          grid[i].orientationMode = orientationMode
           changeOrientationMode()
           this.plotDot(x + 2.5, y - 2.55, tileRefs.ul[orientationMode])
         }
-
       }
 
       // console.log(i%this.testGridNumCells)
       // if(i%this.testGridNumCells === 0) {
-        // console.log(i-this.testGridNumCells)
-        // if(grid[i])
+      // console.log(i-this.testGridNumCells)
+      // if(grid[i])
       // }
       // if( (i - (Math.floor(i / this.testGridNumCells))) === 8 )
-        // changeOrientationMode()
-
+      // changeOrientationMode()
+      // console.log(i, grid[i])
     }
   }
 }
