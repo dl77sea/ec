@@ -114,11 +114,10 @@ let testVertsRoad04 = [
 
 
 // grid.addRoad(road9.verts)
-
-scene.add(road9.getRoad(testVertsRoad01))
-scene.add(road9.getRoad(testVertsRoad02))
-grid.addRoad(testVertsRoad01)
-grid.addRoad(testVertsRoad02)
+scene.add(road9.getRoad(testVertsRoad1))
+scene.add(road9.getRoad(testVertsRoad2))
+grid.addRoad(testVertsRoad1)
+grid.addRoad(testVertsRoad2)
 let gridMap = grid.testMap
 
 console.log(gridMap)

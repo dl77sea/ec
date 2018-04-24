@@ -280,65 +280,52 @@ class Grid {
       //determine orientation mode
       //if not on first tile,
       if (i !== 0) {
-        // console.log("h1", i)
         //make sure filling with same orientation mode
         //as loewer part of tile above, when starting to fill new row
         if (i % this.testGridNumCells === 0) {
-          // console.log("happened")
-          // orientationMode = getOppositeOrientationMode(grid[i - 1])
-          // if (grid[i - 1].dgr || grid[i - 1].dgl) {
-          // console.log("diag")
-          // } else {
-          if (grid[i - 1].dgr === false && grid[i - 1].dgl === false) {
-            if (grid[i].hrz === false) {
-              orientationMode = grid[i - this.testGridNumCells].orientationMode
-            } else {
-              orientationMode = getOppositeOrientationMode(grid[i - this.testGridNumCells].orientationMode)
-            }
-          }
+          orientationMode = grid[i-this.testGridNumCells].orientationMode
         }
       }
 
       //figure out which tiles to plot for each gridSquare:
-
       //grid suqare is empty, so populate with upper right and lower left of current orientation mode
       if (grid[i].vrt === false && grid[i].hrz === false && grid[i].dgl === false && grid[i].dgr === false) {
+        // console.log("empty")
         this.plotDot(x + 2.5, y + 2.55, tileRefs.ll[orientationMode])
         this.plotDot(x - 2.5, y - 2.55, tileRefs.ur[orientationMode])
         grid[i].orientationMode = orientationMode
       }
 
-      //with hrz or vrt, no diagonals
-      if ((grid[i].vrt || grid[i].hrz) && grid[i].dgl === false && grid[i].dgr === false) {
-
-        if (grid[i].vrt) {
-          this.plotDot(x + 2.5, y + 2.55, tileRefs.ll[orientationMode])
-          this.plotDot(x - 2.5, y - 2.55, tileRefs.ur[orientationMode])
-          grid[i].orientationMode = orientationMode
-          changeOrientationMode()
-        }
-        if (grid[i].hrz) {
-          orientationMode = getOppositeOrientationMode(grid[i - this.testGridNumCells].orientationMode)
-          this.plotDot(x + 2.5, y + 2.55, tileRefs.ll[orientationMode])
-          this.plotDot(x - 2.5, y - 2.55, tileRefs.ur[orientationMode])
-          grid[i].orientationMode = orientationMode
-        }
+      if (grid[i].vrt) {
+        // console.log("vrt")
+        this.plotDot(x + 2.5, y + 2.55, tileRefs.ll[orientationMode])
+        this.plotDot(x - 2.5, y - 2.55, tileRefs.ur[orientationMode])
+        grid[i].orientationMode = orientationMode
+        changeOrientationMode()
+      }
+      if (grid[i].hrz) {
+        // console.log("hrz")
+        orientationMode = getOppositeOrientationMode(grid[i - this.testGridNumCells].orientationMode)
+        this.plotDot(x + 2.5, y + 2.55, tileRefs.ll[orientationMode])
+        this.plotDot(x - 2.5, y - 2.55, tileRefs.ur[orientationMode])
+        grid[i].orientationMode = orientationMode
       }
 
       //if diagonal
-      if (grid[i].dgl || grid[i].dgr) {
-        if (grid[i].dgl) {
-          this.plotDot(x - 2.5, y - 2.55, tileRefs.ur[orientationMode])
-          changeOrientationMode()
-          this.plotDot(x + 2.5, y + 2.55, tileRefs.ll[orientationMode])
-          grid[i].orientationMode = orientationMode
-        }
-        if (grid[i].dgr) {
-          this.plotDot(x - 2.5, y + 2.55, tileRefs.lr[orientationMode])
-          grid[i].orientationMode = orientationMode
-          changeOrientationMode()
-          this.plotDot(x + 2.5, y - 2.55, tileRefs.ul[orientationMode])
-        }
+      if (grid[i].dgl) {
+        // console.log("dgl")
+        this.plotDot(x - 2.5, y - 2.5, tileRefs.ur[orientationMode])
+
+        this.plotDot(x + 2.5, y + 2.5, tileRefs.ll[orientationMode])
+        grid[i].orientationMode = orientationMode
+        changeOrientationMode()
+      }
+      if (grid[i].dgr) {
+        // console.log("dgr")
+        this.plotDot(x - 2.5, y + 2.55, tileRefs.lr[orientationMode])
+        changeOrientationMode()
+        this.plotDot(x + 2.5, y - 2.55, tileRefs.ul[orientationMode])
+        grid[i].orientationMode = orientationMode
       }
 
       // console.log(i%this.testGridNumCells)
