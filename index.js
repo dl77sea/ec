@@ -112,12 +112,30 @@ let testVertsRoad04 = [
   -40,40,0
 ]
 
+let testVertsRoad7 = [
+  40,-20,0,
+  20,-20,0,
+  0,-20,0,
+  -20,-20,0,
+  -40,-20,0
+]
+
+// let testVertsRoad7 = [
+//   -40,-20,0,
+//   -20,-20,0,
+//   0,-20,0,
+//   20,-20,0,
+//   40,-20,0
+// ]
+
 
 // grid.addRoad(road9.verts)
-scene.add(road9.getRoad(testVertsRoad1))
-scene.add(road9.getRoad(testVertsRoad2))
-grid.addRoad(testVertsRoad1)
-grid.addRoad(testVertsRoad2)
+// scene.add(road9.getRoad(testVertsRoad1))
+// scene.add(road9.getRoad(testVertsRoad2))
+scene.add(road9.getRoad(testVertsRoad7))
+// grid.addRoad(testVertsRoad1)
+// grid.addRoad(testVertsRoad2)
+grid.addRoad(testVertsRoad7)
 let gridMap = grid.testMap
 
 console.log(gridMap)

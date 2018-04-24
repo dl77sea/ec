@@ -170,20 +170,17 @@ class Grid {
 
       let transEndX = verts[i + 3] + transOffset
       let transEndY = verts[i + 4] + transOffset
-
+      console.log("verts: ", verts)
       console.log("transStartX, transStartY, transEndX, transEndY:", transStartX, transStartY, transEndX, transEndY)
       i += 3
 
       //for each segment, update cell values in map array...
       let iX = (transStartX / this.testGridCellDist) - 1
       let iY = (this.testGridNumCells * this.testGridNumCells) - ((transStartY / this.testGridCellDist) * this.testGridNumCells) - this.testGridNumCells
-      console.log("iX: ", iX)
-      console.log("iY: ", iY)
-
+      
       //vertical
       if (transStartX === transEndX) {
         //transformed x * y / units: use transformed x and y of vertex to determin array position
-        console.log(":::", iX, iY)
         this.testMap[iY + iX - this.testGridNumCells].vrt = true
         this.testMap[iY + iX].vrt = true
       }
@@ -193,7 +190,6 @@ class Grid {
         this.testMap[iY + iX + 2 + this.testGridNumCells].hrz = true
       }
       //diagonal
-
       if (transStartX !== transEndX && transStartY !== transEndY) {
 
         //diagonal up and right
@@ -267,7 +263,7 @@ class Grid {
       ll: [0xffff00, 0x00ff00],
       lr: [0xff00ff, 0xaaaaaa]
     }
-    console.log(grid)
+
     for (let i = 0; i < grid.length; i++) {
       //get map coordinates center for each grid square
       let x = (i - (Math.floor(i / this.testGridNumCells) * this.testGridNumCells)) * this.testGridCellDist + this.testGridCellDist / 2
@@ -283,7 +279,11 @@ class Grid {
         //make sure filling with same orientation mode
         //as loewer part of tile above, when starting to fill new row
         if (i % this.testGridNumCells === 0) {
-          orientationMode = grid[i-this.testGridNumCells].orientationMode
+          if (grid[i].hrz === false) {
+            orientationMode = grid[i - this.testGridNumCells].orientationMode
+          } else {
+            orientationMode = getOppositeOrientationMode(grid[i - this.testGridNumCells].orientationMode)
+          }
         }
       }
 
