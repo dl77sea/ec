@@ -376,9 +376,65 @@ class Grid {
           }
         }
       }
-
       //figure out which tiles to plot for each gridSquare:
 
+      //grid suqare is empty, so populate with upper right and lower left of current orientation mode
+      if (grid[i].vrt === false && grid[i].hrz === false && grid[i].dgl === false && grid[i].dgr === false) {
+        // console.log("empty")
+        this.plotDot(x + 2.5, y + 2.55, tileRefs.ll[orientationMode])
+        this.plotDot(x - 2.5, y - 2.55, tileRefs.ur[orientationMode])
+        grid[i].orientationMode = orientationMode
+      }
+
+      //grid square has a diagonal segment
+      if(grid[i].dgl || grid[i].dgr) {
+
+        if(grid[i].dgl) {
+
+          if(grid[i].hrz) {
+            orientationMode = getOppositeOrientationMode(grid[i - this.testGridNumCells].orientationMode)
+
+            this.plotDot(x + 2.5, y + 2.5, tileRefs.ll[orientationMode])
+            changeOrientationMode()
+            this.plotDot(x - 2.5, y - 2.5, tileRefs.ur[orientationMode])
+            grid[i].orientationMode = orientationMode
+          } else {
+            this.plotDot(x - 2.5, y - 2.5, tileRefs.ur[orientationMode])
+            grid[i].orientationMode = orientationMode
+            changeOrientationMode()
+            this.plotDot(x + 2.5, y + 2.5, tileRefs.ll[orientationMode])
+
+
+
+
+          }
+          if(grid[i].vrt) {
+            changeOrientationMode()
+          }
+
+
+        } else {
+          //dgr
+
+        }
+      }
+
+      if(grid[i].vrt && (grid[i].dgl !== true && grid[i].dgr !== true)) {
+        this.plotDot(x + 2.5, y + 2.55, tileRefs.ll[orientationMode])
+        this.plotDot(x - 2.5, y - 2.55, tileRefs.ur[orientationMode])
+        grid[i].orientationMode = orientationMode
+        changeOrientationMode()
+      }
+
+      if(grid[i].hrz && (grid[i].dgl !== true && grid[i].dgr !== true)) {
+        orientationMode = getOppositeOrientationMode(grid[i - this.testGridNumCells].orientationMode)
+
+        grid[i].orientationMode = orientationMode
+        this.plotDot(x + 2.5, y + 2.55, tileRefs.ll[orientationMode])
+        this.plotDot(x - 2.5, y - 2.55, tileRefs.ur[orientationMode])
+      }
+
+      /*
       //grid suqare is empty, so populate with upper right and lower left of current orientation mode
       if (grid[i].vrt === false && grid[i].hrz === false && grid[i].dgl === false && grid[i].dgr === false) {
         // console.log("empty")
@@ -445,6 +501,7 @@ class Grid {
       // if( (i - (Math.floor(i / this.testGridNumCells))) === 8 )
       // changeOrientationMode()
       // console.log(i, grid[i])
+      */
     }
   }
 }
