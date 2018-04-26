@@ -160,7 +160,7 @@ let testVertsVrtBtmToTop = [
   0,20,0,
   0,40,0
 ]
-/*
+
 //horizontal left to right
 scene.add(road9.getRoad(testVertsHrzLftToRight))
 grid.addRoad(testVertsHrzLftToRight)
@@ -172,7 +172,7 @@ grid.addRoad(testVertsHrzRightToLft)
 //diagonal left
 scene.add(road9.getRoad(testVertsDgnLft))
 grid.addRoad(testVertsDgnLft)
-
+/*
 //diagonal right
 scene.add(road9.getRoad(testVertsDgnRight))
 grid.addRoad(testVertsDgnRight)
@@ -186,7 +186,7 @@ grid.addRoad(testVertsVrtTopToBtm)
 //vertical bottom to top
 scene.add(road9.getRoad(testVertsVrtBtmToTop))
 grid.addRoad(testVertsVrtBtmToTop)
-*/
+
 
 scene.add(road9.getRoad(testVertsRoad1))
 scene.add(road9.getRoad(testVertsRoad2))
@@ -194,7 +194,7 @@ scene.add(road9.getRoad(testVertsRoad2))
 grid.addRoad(testVertsRoad1)
 grid.addRoad(testVertsRoad2)
 // grid.addRoad(testVertsRoad2b)
-
+*/
 
 let gridMap = grid.testMap
 
