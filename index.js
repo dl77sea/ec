@@ -42,7 +42,7 @@ for(line of gridLines) {
 // scene.add(road8.getRoad())
 
 let road9 = new Road("left", 7, -10)
-scene.add(road9.getRoad())
+// scene.add(road9.getRoad())
 
 
 //  build grid (80x80) array to help track transitions in hw network
@@ -59,14 +59,16 @@ let testVertsRoad1 = [
   0,20,0,
   20,40,0
 ]
-let testVertsDgnLft = [
-  40,-40,0,
-  20,-20,0,
+
+let testVertsRoad2b = [
+  20,-40,0,
+  0,-20,0,
   0,0,0,
-  -20,20,0,
-  -40,40,0
+  20,20,0,
+  40,20,0
 ]
-let testVertsRoad3 = [
+
+let testVertsRoad2 = [
   0,-40,0,
   -20,-20,0,
   -20,0,0,
@@ -74,27 +76,35 @@ let testVertsRoad3 = [
   20,20,0,
   40,20,0
 ]
-let testVertsRoad4 = [
+let testVertsRoad3 = [
   40,-40,0,
   20,-20,0,
   20,0,0,
   0,20,0,
   0,40,0
 ]
-let testVertsRoad01 = [
+let testVertsRoad4 = [
   0,-40,0,
   0,-20,0,
   0,0,0,
   0,20,0,
   0,40,0
 ]
-let testVertsRoad02 = [
+let testVertsRoad5 = [
   -40,0,0,
   -20,0,0,
   0,0,0,
   20,0,0,
   40,0,0
 ]
+let testVertsDgnLft = [
+  40,-40,0,
+  20,-20,0,
+  0,0,0,
+  -20,20,0,
+  -40,40,0
+]
+
 let testVertsDgnRight = [
   -40,-40,0,
   -20,-20,0,
@@ -150,7 +160,7 @@ let testVertsVrtBtmToTop = [
   0,20,0,
   0,40,0
 ]
-
+/*
 //horizontal left to right
 scene.add(road9.getRoad(testVertsHrzLftToRight))
 grid.addRoad(testVertsHrzLftToRight)
@@ -176,6 +186,14 @@ grid.addRoad(testVertsVrtTopToBtm)
 //vertical bottom to top
 scene.add(road9.getRoad(testVertsVrtBtmToTop))
 grid.addRoad(testVertsVrtBtmToTop)
+*/
+
+scene.add(road9.getRoad(testVertsRoad1))
+scene.add(road9.getRoad(testVertsRoad2))
+// scene.add(road9.getRoad(testVertsRoad2b))
+grid.addRoad(testVertsRoad1)
+grid.addRoad(testVertsRoad2)
+// grid.addRoad(testVertsRoad2b)
 
 
 let gridMap = grid.testMap
