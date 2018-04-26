@@ -403,10 +403,6 @@ class Grid {
             grid[i].orientationMode = orientationMode
             changeOrientationMode()
             this.plotDot(x + 2.5, y + 2.5, tileRefs.ll[orientationMode])
-
-
-
-
           }
           if(grid[i].vrt) {
             changeOrientationMode()
@@ -415,6 +411,23 @@ class Grid {
 
         } else {
           //dgr
+          if(grid[i].hrz) {
+            orientationMode = getOppositeOrientationMode(grid[i - this.testGridNumCells].orientationMode)
+
+            this.plotDot(x - 2.5, y + 2.5, tileRefs.lr[orientationMode])
+            changeOrientationMode()
+            this.plotDot(x + 2.5, y - 2.5, tileRefs.ul[orientationMode])
+            grid[i].orientationMode = orientationMode
+          } else {
+            this.plotDot(x - 2.5, y + 2.5, tileRefs.lr[orientationMode])
+
+            changeOrientationMode()
+            grid[i].orientationMode = orientationMode
+            this.plotDot(x + 2.5, y - 2.5, tileRefs.ul[orientationMode])
+          }
+          if(grid[i].vrt) {
+            changeOrientationMode()
+          }
 
         }
       }

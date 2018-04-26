@@ -164,8 +164,8 @@ scene.add(road9.getRoad(testVertsRoad2))
 grid.addRoad(testVertsRoad2)
 
 //diagonal right
-// scene.add(road9.getRoad(testVertsRoad03))
-// grid.addRoad(testVertsRoad03)
+scene.add(road9.getRoad(testVertsRoad03))
+grid.addRoad(testVertsRoad03)
 
 //does not work
 //vertical top to bottom
