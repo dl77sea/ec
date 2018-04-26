@@ -7,7 +7,7 @@ class Road {
     this.gridMax = grid.gridNumCells / 2
     this.boundsMin = this.gridMin * grid.gridCellDist
     this.boundsMax = this.gridMax * grid.gridCellDist
-    console.log("min max: ", this.gridMin, this.gridMax)
+    // console.log("min max: ", this.gridMin, this.gridMax)
     this.gridCellDist = grid.gridCellDist
     this.gridCellDistHalf = grid.gridCellDist / 2
 
@@ -22,8 +22,8 @@ class Road {
     } else {
       this.dirMult = 1
     }
-    console.log(this.dirMult)
-    console.log(this.gridMin, this.gridMax)
+    // console.log(this.dirMult)
+    // console.log(this.gridMin, this.gridMax)
 
     this.mat = new THREE.LineBasicMaterial({
       color: 0x00ffff,
@@ -63,7 +63,7 @@ class Road {
       //continue UD or 45
       if (Math.random() > 0.5) {
         //UD
-        console.log("UD, prvSegDir: ", prvSegDir)
+        // console.log("UD, prvSegDir: ", prvSegDir)
         newEndPt = {
           x: prvSegEndPt.x,
           y: prvSegEndPt.y + this.gridCellDistHalf,
@@ -71,7 +71,7 @@ class Road {
         }
       } else {
         //45
-        console.log("45, prvSegDir: ", prvSegDir)
+        // console.log("45, prvSegDir: ", prvSegDir)
         newEndPt = {
           x: prvSegEndPt.x + this.gridCellDistHalf * this.dirMult,
           y: prvSegEndPt.y + this.gridCellDistHalf,
@@ -134,7 +134,7 @@ class Road {
 
     let currentGridCellX = this.gridCellX
     let currentGridCellY = this.gridCellY
-    console.log("f", currentGridCellX, currentGridCellY)
+    // console.log("f", currentGridCellX, currentGridCellY)
 
     let edgeReached = false
     let verts
@@ -200,7 +200,6 @@ class Road {
         newPt.x >= this.boundsMax ||
         newPt.x <= this.boundsMin ||
         newPt.y >= this.boundsMax) {
-
         edgeReached = true
       }
     }

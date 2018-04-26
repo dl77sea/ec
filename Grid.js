@@ -54,7 +54,7 @@ class Grid {
     //   }
     // }
 
-    console.log("snarfaloo", this.testMap)
+    // console.log("snarfaloo", this.testMap)
   }
 
   getLine(startPt, endPt) {
@@ -100,7 +100,7 @@ class Grid {
       gridLine = this.getLine(startPt, endPt)
       this.gridLines.push(gridLine)
     }
-    console.log("gridlines: ", this.gridLines)
+    // console.log("gridlines: ", this.gridLines)
     return this.gridLines
   }
 
@@ -148,12 +148,101 @@ class Grid {
   //  135 degree (diagonal left) segment: 4
   // {vrt: 0, hrz: 0, dgr: 0, dgl: 0}
 
-  addRoad(verts) {
+  //ongrid05 old version
+  // let testVertsRoad7 = [
+  //   40,-20,0,
+  //   20,-20,0,
+  //   0,-20,0,
+  //   -20,-20,0,
+  //   -40,-20,0
+  // ]
 
-    console.log("---")
+  addRoad(verts) {
+    console.log("---", verts)
     //process each segment in road
     let numVerts = verts.length / 3 - 1
-    let i = 0
+
+    for (let i = 0; i < verts.length - 3; i += 3) {
+
+      let transOffset = this.testGridCellDist * this.testGridNumCells / 2
+
+      let transStartX = verts[i + 0] + transOffset
+      let transStartY = verts[i + 1] + transOffset
+
+      let transEndX = verts[i + 3] + transOffset
+      let transEndY = verts[i + 4] + transOffset
+      // console.log("start x: ", verts[i + 0])
+      // console.log("start y: ", verts[i + 1])
+      // console.log("start z: ", verts[i + 2])
+      //
+      // console.log("end x: ", verts[i + 3])
+      // console.log("end y: ", verts[i + 4])
+      // console.log("end z: ", verts[i + 5])
+      console.log("transStartX x: ", transStartX)
+      console.log("transStartY y: ", transStartY)
+
+      console.log("transEndX x: ", transEndX)
+      console.log("transEndY y: ", transEndY)
+
+
+      // console.log("end x: ", verts[i + 3])
+      // console.log("end y: ", verts[i + 4])
+      // console.log("end z: ", verts[i + 5])
+      //
+
+      // this gets the x,y coordinates onto the grid (translated into grid space with origin at lower left corner)
+      let iX = (transStartX / this.testGridCellDist) - 1
+      let iY = this.testGridNumCells - (transStartY / this.testGridCellDist) - 1
+      console.log("iX, iY: ", iX, iY)
+
+      //vertical
+      if (transStartX === transEndX) {
+        //transformed x * y / units: use transformed x and y of vertex to determin array position
+
+        if (transStartY > transEndY) {
+          //seg is going top to bottom
+          this.testMap[((iY + 1) * this.testGridNumCells) + iX].vrt = true
+          this.testMap[((iY + 1) * this.testGridNumCells) + iX + this.testGridNumCells].vrt = true
+        } else {
+          //seg is going bottom to top
+          console.log("+++", iX, iY)
+          this.testMap[(iY * this.testGridNumCells) + iX].vrt = true
+          this.testMap[(iY * this.testGridNumCells) + iX - this.testGridNumCells].vrt = true
+        }
+      }
+      //horizontal
+      if (transStartY === transEndY) {
+        //seg is going right to left
+        if (transStartX > transEndX) {
+          this.testMap[(iY * this.testGridNumCells) + iX + this.testGridNumCells - 1].hrz = true
+          this.testMap[(iY * this.testGridNumCells) + iX + 1 + this.testGridNumCells - 1].hrz = true
+        } else {
+          //seg is going left to right
+          this.testMap[(iY * this.testGridNumCells) + iX + 1 + this.testGridNumCells].hrz = true
+          this.testMap[(iY * this.testGridNumCells) + iX + 1 + 1 + this.testGridNumCells].hrz = true
+        }
+
+      }
+      //diagonal
+      if (transStartX !== transEndX && transStartY !== transEndY) {
+
+        //diagonal up and right
+        if (transEndX > transStartX) {
+          this.happened += 1
+          //go one over to right from index,
+          //then subtract gridNumCells
+          //to mark cell representing upper part of diagonal
+          this.testMap[(iY * this.testGridNumCells) + iX + 1].dgr = true
+          this.testMap[(iY * this.testGridNumCells) + iX + 1 - this.testGridNumCells + 1].dgr = true
+        } else {
+          //diagonal up and left
+          this.testMap[(iY * this.testGridNumCells) + iX].dgl = true
+          this.testMap[(iY * this.testGridNumCells) + iX - this.testGridNumCells - 1].dgl = true
+        }
+      }
+      this.testMap[0].snarf = 1
+    }
+    /*
     for (let vertCounter = 0; vertCounter < numVerts; vertCounter++) {
       console.log("i: ", i)
       console.log("start x:", verts[i + 0])
@@ -177,7 +266,7 @@ class Grid {
       //for each segment, update cell values in map array...
       let iX = (transStartX / this.testGridCellDist) - 1
       let iY = (this.testGridNumCells * this.testGridNumCells) - ((transStartY / this.testGridCellDist) * this.testGridNumCells) - this.testGridNumCells
-      
+
       //vertical
       if (transStartX === transEndX) {
         //transformed x * y / units: use transformed x and y of vertex to determin array position
@@ -207,6 +296,7 @@ class Grid {
         }
       }
     }
+    */
   }
 
   plotDot(cenX, cenY, color) {
@@ -288,6 +378,7 @@ class Grid {
       }
 
       //figure out which tiles to plot for each gridSquare:
+
       //grid suqare is empty, so populate with upper right and lower left of current orientation mode
       if (grid[i].vrt === false && grid[i].hrz === false && grid[i].dgl === false && grid[i].dgr === false) {
         // console.log("empty")
@@ -296,14 +387,24 @@ class Grid {
         grid[i].orientationMode = orientationMode
       }
 
-      if (grid[i].vrt) {
+      if (grid[i].vrt && grid[i].dgl === false && grid[i].dgr === false) {
         // console.log("vrt")
         this.plotDot(x + 2.5, y + 2.55, tileRefs.ll[orientationMode])
         this.plotDot(x - 2.5, y - 2.55, tileRefs.ur[orientationMode])
         grid[i].orientationMode = orientationMode
         changeOrientationMode()
+      } else {
+        // this.plotDot(x + 2.5, y + 2.55, tileRefs.ll[orientationMode])
+        // changeOrientationMode()
+        // this.plotDot(x - 2.5, y - 2.55, tileRefs.ur[orientationMode])
+        // grid[i].orientationMode = orientationMode
+
       }
-      if (grid[i].hrz) {
+      if (grid[i].vrt && (grid[i].dgl === true || grid[i].dgr === true)) {
+        changeOrientationMode()
+      }
+
+      if (grid[i].hrz && grid[i].dgl === false && grid[i].dgr === false) {
         // console.log("hrz")
         orientationMode = getOppositeOrientationMode(grid[i - this.testGridNumCells].orientationMode)
         this.plotDot(x + 2.5, y + 2.55, tileRefs.ll[orientationMode])
@@ -314,11 +415,19 @@ class Grid {
       //if diagonal
       if (grid[i].dgl) {
         // console.log("dgl")
-        this.plotDot(x - 2.5, y - 2.5, tileRefs.ur[orientationMode])
+        if (grid[i].vrt !== true) {
+          this.plotDot(x - 2.5, y - 2.5, tileRefs.ur[orientationMode])
+          this.plotDot(x + 2.5, y + 2.5, tileRefs.ll[orientationMode])
+          grid[i].orientationMode = orientationMode
+          changeOrientationMode()
+        } else {
+          changeOrientationMode()
+          this.plotDot(x - 2.5, y - 2.5, tileRefs.ur[orientationMode])
+          this.plotDot(x + 2.5, y + 2.5, tileRefs.ll[orientationMode])
 
-        this.plotDot(x + 2.5, y + 2.5, tileRefs.ll[orientationMode])
-        grid[i].orientationMode = orientationMode
-        changeOrientationMode()
+          grid[i].orientationMode = orientationMode
+        }
+
       }
       if (grid[i].dgr) {
         // console.log("dgr")

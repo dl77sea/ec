@@ -81,7 +81,6 @@ let testVertsRoad4 = [
   0,20,0,
   0,40,0
 ]
-
 let testVertsRoad01 = [
   0,-40,0,
   0,-20,0,
@@ -120,22 +119,65 @@ let testVertsRoad7 = [
   -40,-20,0
 ]
 
-// let testVertsRoad7 = [
-//   -40,-20,0,
-//   -20,-20,0,
-//   0,-20,0,
-//   20,-20,0,
-//   40,-20,0
-// ]
+let testVertsRoad8 = [
+  -40,-20,0,
+  -20,-20,0,
+  0,-20,0,
+  20,-20,0,
+  40,-20,0
+]
+
+let testVertsRoad9 = [
+  40,20,0,
+  20,20,0,
+  0,20,0,
+  -20,20,0,
+  -40,20,0
+]
+
+let testVertsVrtTopToBtm = [
+  20,40,0,
+  20,20,0,
+  20,0,0,
+  20,-20,0,
+  20,-40,0
+]
+
+let testVertsVrtBtmToTop = [
+  0,-40,0,
+  0,-20,0,
+  0,0,0,
+  0,20,0,
+  0,40,0
+]
+
+//horizontal left to right
+scene.add(road9.getRoad(testVertsRoad8))
+grid.addRoad(testVertsRoad8)
+
+//horizontal right to left
+// scene.add(road9.getRoad(testVertsRoad9))
+// grid.addRoad(testVertsRoad9)
+
+//diagonal left
+scene.add(road9.getRoad(testVertsRoad2))
+grid.addRoad(testVertsRoad2)
+
+//diagonal right
+// scene.add(road9.getRoad(testVertsRoad03))
+// grid.addRoad(testVertsRoad03)
+
+//does not work
+//vertical top to bottom
+scene.add(road9.getRoad(testVertsVrtTopToBtm))
+grid.addRoad(testVertsVrtTopToBtm)
+
+//works
+//vertical bottom to top
+scene.add(road9.getRoad(testVertsVrtBtmToTop))
+grid.addRoad(testVertsVrtBtmToTop)
 
 
-// grid.addRoad(road9.verts)
-// scene.add(road9.getRoad(testVertsRoad1))
-// scene.add(road9.getRoad(testVertsRoad2))
-scene.add(road9.getRoad(testVertsRoad7))
-// grid.addRoad(testVertsRoad1)
-// grid.addRoad(testVertsRoad2)
-grid.addRoad(testVertsRoad7)
 let gridMap = grid.testMap
 
 console.log(gridMap)
