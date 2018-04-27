@@ -27,7 +27,16 @@ for(line of gridLinesSuper) {
 
 //direction, gridCellX, gridCellY, edge
 let road1 = new Road("right", -10, 7)
+
+// let road1Verts = road1.get()
 scene.add(road1.getRoad())
+console.log(road1.verts)
+grid.addRoad(road1.verts)
+
+
+// scene.add(road9.getRoad(testVertsHrzLftToRight))
+// grid.addRoad(testVertsHrzLftToRight)
+
 let road2 = new Road("right", -10, 0)
 scene.add(road2.getRoad())
 let road3 = new Road("right", -10, -7)
@@ -212,7 +221,7 @@ let deg = 0.0174533
 
 camera.position.x = 0;
 camera.position.y = 0; // -52000 / 2; //-104000;
-camera.position.z = 75000;
+camera.position.z = 150;
 camera.rotateX(deg * 0)
 
 // camera.position.x = 0;

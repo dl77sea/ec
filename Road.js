@@ -32,6 +32,7 @@ class Road {
       // linejoin:  'round' //ignored by WebGLRenderer
     });
 
+    this.verts = []
 
   }
 
@@ -138,6 +139,8 @@ class Road {
 
     let edgeReached = false
     let verts
+
+    // road starts from bottom
     if (this.gridCellY === -10) {
       verts = [
         //first vertex
@@ -146,10 +149,12 @@ class Road {
         0,
         //second vertex
         currentGridCellX * this.gridCellDist + this.gridCellDist / 2,
-        (this.gridMin + 1) * this.gridCellDist,
+        ((this.gridMin + 1) * this.gridCellDist)-this.gridCellDist/2, //(this.gridMin + 1) * this.gridCellDist,
         0
       ]
     }
+
+    // road starts from right
     if (this.gridCellX === 10) {
       verts = [
         //first vertex
@@ -157,11 +162,13 @@ class Road {
         this.gridCellY * this.gridCellDist + this.gridCellDist / 2,
         0,
         //second vertex
-        this.boundsMax-this.gridCellDist,
+        this.boundsMax-this.gridCellDist/2,
         this.gridCellY * this.gridCellDist + this.gridCellDist / 2,
         0,
       ]
     }
+
+    // road starts from left
     if (this.gridCellX === -10) {
       verts = [
         //first vertex
@@ -169,7 +176,7 @@ class Road {
         this.gridCellY * this.gridCellDist + this.gridCellDist / 2,
         0,
         //second vertex
-        this.boundsMin+this.gridCellDist,
+        this.boundsMin+this.gridCellDist/2,
         this.gridCellY * this.gridCellDist + this.gridCellDist / 2,
         0,
       ]
@@ -203,6 +210,7 @@ class Road {
         edgeReached = true
       }
     }
+    this.verts = verts
     return verts
   }
 

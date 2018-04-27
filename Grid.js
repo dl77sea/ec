@@ -2,7 +2,7 @@ class Grid {
   //seg is segment from previous road from which this road will be generated
   constructor() {
     this.gridNumCells = 20
-    this.gridCellDist = 5200
+    this.gridCellDist = 10 //5200
 
 
 
@@ -30,12 +30,12 @@ class Grid {
     // for (let i = 0; i < this.gridNumCells * 4 * this.gridNumCells * 4; i++) {
     //   this.map.push(mapCell)
     // }
-    this.testGridNumCells = 8
-    this.testGridCellDist = 10
+    // this.gridNumCells = 8
+    // this.gridCellDist = 10
 
     this.testMap = []
 
-    for (let i = 0; i < this.testGridNumCells * this.testGridNumCells; i++) {
+    for (let i = 0; i < this.gridNumCells*2 * this.gridNumCells*2; i++) {
       this.testMap.push({
         vrt: false,
         hrz: false,
@@ -66,22 +66,22 @@ class Grid {
   }
 
   //populate the grid with a road coordinates
-  addRoad() {
-    this.numRoads++
-  }
+  // addRoad() {
+  //   this.numRoads++
+  // }
 
   // getGrid() {
   //   //build positive hrz lines
   //
-  //   for (let i = -this.testGridCellDist * this.testGridNumCells / 2; i <= this.testGridCellDist * this.testGridNumCells / 2; i += this.testGridCellDist) {
+  //   for (let i = -this.gridCellDist * this.gridNumCells / 2; i <= this.gridCellDist * this.gridNumCells / 2; i += this.gridCellDist) {
   //     //build horizontal line
   //     let startPt = {
-  //       x: -this.testGridCellDist * this.testGridNumCells / 2,
+  //       x: -this.gridCellDist * this.gridNumCells / 2,
   //       y: i,
   //       z: 0
   //     }
   //     let endPt = {
-  //       x: this.testGridCellDist * this.testGridNumCells / 2,
+  //       x: this.gridCellDist * this.gridNumCells / 2,
   //       y: i,
   //       z: 0
   //     }
@@ -90,12 +90,12 @@ class Grid {
   //     //build vertical lines
   //     startPt = {
   //       x: i,
-  //       y: -this.testGridCellDist * this.testGridNumCells / 2,
+  //       y: -this.gridCellDist * this.gridNumCells / 2,
   //       z: 0
   //     }
   //     endPt = {
   //       x: i,
-  //       y: this.testGridCellDist * this.testGridNumCells / 2,
+  //       y: this.gridCellDist * this.gridNumCells / 2,
   //       z: 0
   //     }
   //     gridLine = this.getLine(startPt, endPt)
@@ -168,13 +168,13 @@ class Grid {
   // ]
 
   addRoad(verts) {
-    console.log("---", verts)
+    console.log("---num of segs:", verts.length/3)
     //process each segment in road
     let numVerts = verts.length / 3 - 1
 
     for (let i = 0; i < verts.length - 3; i += 3) {
 
-      let transOffset = this.testGridCellDist * this.testGridNumCells / 2
+      let transOffset = this.gridCellDist * this.gridNumCells / 2
 
       let transStartX = verts[i + 0] + transOffset
       let transStartY = verts[i + 1] + transOffset
@@ -201,35 +201,35 @@ class Grid {
       //
 
       // this gets the x,y coordinates onto the grid (translated into grid space with origin at lower left corner)
-      let iX = (transStartX / this.testGridCellDist) - 1
-      let iY = this.testGridNumCells - (transStartY / this.testGridCellDist) - 1
+      let iX = (transStartX / this.gridCellDist) - 1
+      let iY = this.gridNumCells - (transStartY / this.gridCellDist) - 1
       console.log("iX, iY: ", iX, iY)
-
+      /*
       //vertical
       if (transStartX === transEndX) {
         //transformed x * y / units: use transformed x and y of vertex to determin array position
 
         if (transStartY > transEndY) {
           //seg is going top to bottom
-          this.testMap[((iY + 1) * this.testGridNumCells) + iX].vrt = true
-          this.testMap[((iY + 1) * this.testGridNumCells) + iX + this.testGridNumCells].vrt = true
+          this.testMap[((iY + 1) * this.gridNumCells) + iX].vrt = true
+          this.testMap[((iY + 1) * this.gridNumCells) + iX + this.gridNumCells].vrt = true
         } else {
           //seg is going bottom to top
           console.log("+++", iX, iY)
-          this.testMap[(iY * this.testGridNumCells) + iX].vrt = true
-          this.testMap[(iY * this.testGridNumCells) + iX - this.testGridNumCells].vrt = true
+          this.testMap[(iY * this.gridNumCells) + iX].vrt = true
+          this.testMap[(iY * this.gridNumCells) + iX - this.gridNumCells].vrt = true
         }
       }
       //horizontal
       if (transStartY === transEndY) {
         //seg is going right to left
         if (transStartX > transEndX) {
-          this.testMap[(iY * this.testGridNumCells) + iX + this.testGridNumCells - 1].hrz = true
-          this.testMap[(iY * this.testGridNumCells) + iX + 1 + this.testGridNumCells - 1].hrz = true
+          this.testMap[(iY * this.gridNumCells) + iX + this.gridNumCells - 1].hrz = true
+          this.testMap[(iY * this.gridNumCells) + iX + 1 + this.gridNumCells - 1].hrz = true
         } else {
           //seg is going left to right
-          this.testMap[(iY * this.testGridNumCells) + iX + 1 + this.testGridNumCells].hrz = true
-          this.testMap[(iY * this.testGridNumCells) + iX + 1 + 1 + this.testGridNumCells].hrz = true
+          this.testMap[(iY * this.gridNumCells) + iX + 1 + this.gridNumCells].hrz = true
+          this.testMap[(iY * this.gridNumCells) + iX + 1 + 1 + this.gridNumCells].hrz = true
         }
 
       }
@@ -242,15 +242,15 @@ class Grid {
           //go one over to right from index,
           //then subtract gridNumCells
           //to mark cell representing upper part of diagonal
-          this.testMap[(iY * this.testGridNumCells) + iX + 1].dgr = true
-          this.testMap[(iY * this.testGridNumCells) + iX + 1 - this.testGridNumCells + 1].dgr = true
+          this.testMap[(iY * this.gridNumCells) + iX + 1].dgr = true
+          this.testMap[(iY * this.gridNumCells) + iX + 1 - this.gridNumCells + 1].dgr = true
         } else {
           //diagonal up and left
-          this.testMap[(iY * this.testGridNumCells) + iX].dgl = true
-          this.testMap[(iY * this.testGridNumCells) + iX - this.testGridNumCells - 1].dgl = true
+          this.testMap[(iY * this.gridNumCells) + iX].dgl = true
+          this.testMap[(iY * this.gridNumCells) + iX - this.gridNumCells - 1].dgl = true
         }
       }
-      this.testMap[0].snarf = 1
+      */
     }
     /*
     for (let vertCounter = 0; vertCounter < numVerts; vertCounter++) {
@@ -263,7 +263,7 @@ class Grid {
       console.log("end z:", verts[i + 5])
 
       //translate (test) verts to testMap segment representation:
-      let transOffset = this.testGridCellDist * this.testGridNumCells / 2
+      let transOffset = this.gridCellDist * this.gridNumCells / 2
       let transStartX = verts[i + 0] + transOffset
       let transStartY = verts[i + 1] + transOffset
 
@@ -274,19 +274,19 @@ class Grid {
       i += 3
 
       //for each segment, update cell values in map array...
-      let iX = (transStartX / this.testGridCellDist) - 1
-      let iY = (this.testGridNumCells * this.testGridNumCells) - ((transStartY / this.testGridCellDist) * this.testGridNumCells) - this.testGridNumCells
+      let iX = (transStartX / this.gridCellDist) - 1
+      let iY = (this.gridNumCells * this.gridNumCells) - ((transStartY / this.gridCellDist) * this.gridNumCells) - this.gridNumCells
 
       //vertical
       if (transStartX === transEndX) {
         //transformed x * y / units: use transformed x and y of vertex to determin array position
-        this.testMap[iY + iX - this.testGridNumCells].vrt = true
+        this.testMap[iY + iX - this.gridNumCells].vrt = true
         this.testMap[iY + iX].vrt = true
       }
       //horizontal
       if (transStartY === transEndY) {
-        this.testMap[iY + iX + 1 + this.testGridNumCells].hrz = true
-        this.testMap[iY + iX + 2 + this.testGridNumCells].hrz = true
+        this.testMap[iY + iX + 1 + this.gridNumCells].hrz = true
+        this.testMap[iY + iX + 2 + this.gridNumCells].hrz = true
       }
       //diagonal
       if (transStartX !== transEndX && transStartY !== transEndY) {
@@ -298,10 +298,10 @@ class Grid {
           //then subtract gridNumCells
           //to mark cell representing upper part of diagonal
           this.testMap[iY + iX + 1].dgr = true
-          this.testMap[iY + iX - this.testGridNumCells + 2].dgr = true
+          this.testMap[iY + iX - this.gridNumCells + 2].dgr = true
         } else {
           //diagonal up and left
-          this.testMap[iY + iX - this.testGridNumCells - 1].dgl = true
+          this.testMap[iY + iX - this.gridNumCells - 1].dgl = true
           this.testMap[iY + iX].dgl = true
         }
       }
@@ -366,23 +366,23 @@ class Grid {
 
     for (let i = 0; i < grid.length; i++) {
       //get map coordinates center for each grid square
-      let x = (i - (Math.floor(i / this.testGridNumCells) * this.testGridNumCells)) * this.testGridCellDist + this.testGridCellDist / 2
-      let y = ((this.testGridNumCells - 1) - Math.floor(i / this.testGridNumCells)) * this.testGridCellDist + this.testGridCellDist / 2
+      let x = (i - (Math.floor(i / this.gridNumCells) * this.gridNumCells)) * this.gridCellDist + this.gridCellDist / 2
+      let y = ((this.gridNumCells - 1) - Math.floor(i / this.gridNumCells)) * this.gridCellDist + this.gridCellDist / 2
       // console.log(x, y)
       //translate  cen of each map grid square into world space
-      x = x - this.testGridCellDist * (this.testGridNumCells / 2)
-      y = y - this.testGridCellDist * (this.testGridNumCells / 2)
+      x = x - this.gridCellDist * (this.gridNumCells / 2)
+      y = y - this.gridCellDist * (this.gridNumCells / 2)
 
       //determine orientation mode
       //if not on first tile,
       if (i !== 0) {
         //make sure filling with same orientation mode
         //as loewer part of tile above, when starting to fill new row
-        if (i % this.testGridNumCells === 0) {
+        if (i % this.gridNumCells === 0) {
           if (grid[i].hrz === false) {
-            orientationMode = grid[i - this.testGridNumCells].orientationMode
+            orientationMode = grid[i - this.gridNumCells].orientationMode
           } else {
-            orientationMode = getOppositeOrientationMode(grid[i - this.testGridNumCells].orientationMode)
+            orientationMode = getOppositeOrientationMode(grid[i - this.gridNumCells].orientationMode)
           }
         }
       }
@@ -402,7 +402,7 @@ class Grid {
         if (grid[i].dgl) {
 
           if (grid[i].hrz) {
-            orientationMode = getOppositeOrientationMode(grid[i - this.testGridNumCells].orientationMode)
+            orientationMode = getOppositeOrientationMode(grid[i - this.gridNumCells].orientationMode)
 
             this.plotDot(x + 2.5, y + 2.5, tileRefs.ll[orientationMode])
             changeOrientationMode()
@@ -413,10 +413,10 @@ class Grid {
             grid[i].orientationMode = orientationMode
             //set new orientation mode to match what's happening in this area
             if(grid[i].hrz) {
-              orientationMode = getOppositeOrientationMode(grid[i - this.testGridNumCells].orientationMode)
+              orientationMode = getOppositeOrientationMode(grid[i - this.gridNumCells].orientationMode)
             } else {
               if(i > 7) {
-                orientationMode = grid[i-this.testGridNumCells].orientationMode
+                orientationMode = grid[i-this.gridNumCells].orientationMode
               } else {
                 changeOrientationMode()
               }
@@ -431,7 +431,7 @@ class Grid {
         } else {
           //dgr
           if (grid[i].hrz) {
-            orientationMode = getOppositeOrientationMode(grid[i - this.testGridNumCells].orientationMode)
+            orientationMode = getOppositeOrientationMode(grid[i - this.gridNumCells].orientationMode)
 
             this.plotDot(x - 2.5, y + 2.5, tileRefs.lr[orientationMode])
             changeOrientationMode()
@@ -461,7 +461,7 @@ class Grid {
       if (grid[i].hrz && (grid[i].dgl !== true && grid[i].dgr !== true)) {
         //don't switch fill orientation if no vertical to left
         if (grid[i - 1].vrt) {
-          orientationMode = getOppositeOrientationMode(grid[i - this.testGridNumCells].orientationMode)
+          orientationMode = getOppositeOrientationMode(grid[i - this.gridNumCells].orientationMode)
         }
 
         grid[i].orientationMode = orientationMode
@@ -497,7 +497,7 @@ class Grid {
 
       if (grid[i].hrz && grid[i].dgl === false && grid[i].dgr === false) {
         // console.log("hrz")
-        orientationMode = getOppositeOrientationMode(grid[i - this.testGridNumCells].orientationMode)
+        orientationMode = getOppositeOrientationMode(grid[i - this.gridNumCells].orientationMode)
         this.plotDot(x + 2.5, y + 2.55, tileRefs.ll[orientationMode])
         this.plotDot(x - 2.5, y - 2.55, tileRefs.ur[orientationMode])
         grid[i].orientationMode = orientationMode
@@ -528,12 +528,12 @@ class Grid {
         grid[i].orientationMode = orientationMode
       }
 
-      // console.log(i%this.testGridNumCells)
-      // if(i%this.testGridNumCells === 0) {
-      // console.log(i-this.testGridNumCells)
+      // console.log(i%this.gridNumCells)
+      // if(i%this.gridNumCells === 0) {
+      // console.log(i-this.gridNumCells)
       // if(grid[i])
       // }
-      // if( (i - (Math.floor(i / this.testGridNumCells))) === 8 )
+      // if( (i - (Math.floor(i / this.gridNumCells))) === 8 )
       // changeOrientationMode()
       // console.log(i, grid[i])
       */
