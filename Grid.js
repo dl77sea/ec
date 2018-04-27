@@ -69,53 +69,19 @@ class Grid {
   addRoad() {
     this.numRoads++
   }
-  getGrid() {
-    //build positive hrz lines
-
-    for (let i = -this.testGridCellDist * this.testGridNumCells / 2; i <= this.testGridCellDist * this.testGridNumCells / 2; i += this.testGridCellDist) {
-      //build horizontal line
-      let startPt = {
-        x: -this.testGridCellDist * this.testGridNumCells / 2,
-        y: i,
-        z: 0
-      }
-      let endPt = {
-        x: this.testGridCellDist * this.testGridNumCells / 2,
-        y: i,
-        z: 0
-      }
-      let gridLine = this.getLine(startPt, endPt)
-      this.gridLines.push(gridLine)
-      //build vertical lines
-      startPt = {
-        x: i,
-        y: -this.testGridCellDist * this.testGridNumCells / 2,
-        z: 0
-      }
-      endPt = {
-        x: i,
-        y: this.testGridCellDist * this.testGridNumCells / 2,
-        z: 0
-      }
-      gridLine = this.getLine(startPt, endPt)
-      this.gridLines.push(gridLine)
-    }
-    // console.log("gridlines: ", this.gridLines)
-    return this.gridLines
-  }
 
   // getGrid() {
   //   //build positive hrz lines
   //
-  //   for (let i = -this.gridCellDist * this.gridNumCells / 2; i <= this.gridCellDist * this.gridNumCells / 2; i += this.gridCellDist) {
+  //   for (let i = -this.testGridCellDist * this.testGridNumCells / 2; i <= this.testGridCellDist * this.testGridNumCells / 2; i += this.testGridCellDist) {
   //     //build horizontal line
   //     let startPt = {
-  //       x: -this.gridCellDist * this.gridNumCells / 2,
+  //       x: -this.testGridCellDist * this.testGridNumCells / 2,
   //       y: i,
   //       z: 0
   //     }
   //     let endPt = {
-  //       x: this.gridCellDist * this.gridNumCells / 2,
+  //       x: this.testGridCellDist * this.testGridNumCells / 2,
   //       y: i,
   //       z: 0
   //     }
@@ -124,19 +90,63 @@ class Grid {
   //     //build vertical lines
   //     startPt = {
   //       x: i,
-  //       y: -this.gridCellDist * this.gridNumCells / 2,
+  //       y: -this.testGridCellDist * this.testGridNumCells / 2,
   //       z: 0
   //     }
   //     endPt = {
   //       x: i,
-  //       y: this.gridCellDist * this.gridNumCells / 2,
+  //       y: this.testGridCellDist * this.testGridNumCells / 2,
   //       z: 0
   //     }
   //     gridLine = this.getLine(startPt, endPt)
   //     this.gridLines.push(gridLine)
   //   }
+  //   // console.log("gridlines: ", this.gridLines)
   //   return this.gridLines
   // }
+
+  getGrid(divisions, color) {
+    //build positive hrz lines
+    this.mat = new THREE.LineBasicMaterial({
+      color: color,
+      linewidth: 1
+      // linecap: 'round', //ignored by WebGLRenderer
+      // linejoin:  'round' //ignored by WebGLRenderer
+    });
+
+    for (let i = -this.gridCellDist * this.gridNumCells / 2; i <= this.gridCellDist * this.gridNumCells / 2; i += this.gridCellDist/divisions) {
+      //build horizontal line
+      let startPt = {
+        x: -this.gridCellDist * this.gridNumCells / 2,
+        y: i,
+        z: 0
+      }
+      let endPt = {
+        x: this.gridCellDist * this.gridNumCells / 2,
+        y: i,
+        z: 0
+      }
+      let gridLine = this.getLine(startPt, endPt)
+      this.gridLines.push(gridLine)
+      //build vertical lines
+      startPt = {
+        x: i,
+        y: -this.gridCellDist * this.gridNumCells / 2,
+        z: 0
+      }
+      endPt = {
+        x: i,
+        y: this.gridCellDist * this.gridNumCells / 2,
+        z: 0
+      }
+      gridLine = this.getLine(startPt, endPt)
+      this.gridLines.push(gridLine)
+    }
+
+    return this.gridLines
+  }
+
+
 
 
 

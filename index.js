@@ -4,7 +4,6 @@ var renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-//
 // function addLine(verts, mat) {
 //   let verts32 = new Float32Array(verts);
 //   let geom = new THREE.BufferGeometry();
@@ -16,32 +15,37 @@ document.body.appendChild(renderer.domElement);
 //add grid to scene
 let grid = new Grid()
 // console.log( grid.getGrid() )
-let gridLines = grid.getGrid()
+let gridLinesSecondary = grid.getGrid(2,0x222222)
+let gridLinesSuper = grid.getGrid(1,0x555555)
 
-for(line of gridLines) {
+for(line of gridLinesSecondary) {
   scene.add(line)
 }
-//direction, gridCellX, gridCellY, edge
-// let road1 = new Road("right", -10, 7)
-// scene.add(road1.getRoad())
-// let road2 = new Road("right", -10, 0)
-// scene.add(road2.getRoad())
-// let road3 = new Road("right", -10, -7)
-// scene.add(road3.getRoad())
-//
-// let road4 = new Road("left", 10, 7)
-// scene.add(road4.getRoad())
-// let road5 = new Road("left", 10, 0)
-// scene.add(road5.getRoad())
-// let road6 = new Road("left", 10, -7)
-// scene.add(road6.getRoad())
-//
-// let road7 = new Road("right", -7, -10)
-// scene.add(road7.getRoad())
-// let road8 = new Road("left", -0, -10)
-// scene.add(road8.getRoad())
+for(line of gridLinesSuper) {
+  scene.add(line)
+}
 
-let road9 = new Road("left", 7, -10)
+//direction, gridCellX, gridCellY, edge
+let road1 = new Road("right", -10, 7)
+scene.add(road1.getRoad())
+let road2 = new Road("right", -10, 0)
+scene.add(road2.getRoad())
+let road3 = new Road("right", -10, -7)
+scene.add(road3.getRoad())
+
+let road4 = new Road("left", 10, 7)
+scene.add(road4.getRoad())
+let road5 = new Road("left", 10, 0)
+scene.add(road5.getRoad())
+let road6 = new Road("left", 10, -7)
+scene.add(road6.getRoad())
+
+let road7 = new Road("right", -7, -10)
+scene.add(road7.getRoad())
+let road8 = new Road("left", -0, -10)
+scene.add(road8.getRoad())
+
+
 // scene.add(road9.getRoad())
 
 
@@ -52,6 +56,8 @@ let road9 = new Road("left", 7, -10)
 //  45  degree segment: 2
 //  135 degree segment: 3
 // console.log("road9.verts",road9.verts)
+/*
+let road9 = new Road("left", 7, -10)
 let testVertsRoad1 = [
   -20,-40,0,
   -20,-20,0,
@@ -172,7 +178,7 @@ grid.addRoad(testVertsHrzRightToLft)
 //diagonal left
 scene.add(road9.getRoad(testVertsDgnLft))
 grid.addRoad(testVertsDgnLft)
-/*
+
 //diagonal right
 scene.add(road9.getRoad(testVertsDgnRight))
 grid.addRoad(testVertsDgnRight)
@@ -200,13 +206,13 @@ let gridMap = grid.testMap
 
 console.log(gridMap)
 
-grid.testPlotTiles(gridMap)
+// grid.testPlotTiles(gridMap)
 
 let deg = 0.0174533
 
 camera.position.x = 0;
 camera.position.y = 0; // -52000 / 2; //-104000;
-camera.position.z = 150;
+camera.position.z = 75000;
 camera.rotateX(deg * 0)
 
 // camera.position.x = 0;
