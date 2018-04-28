@@ -36,7 +36,7 @@ grid.addRoad(road1.verts)
 
 // scene.add(road9.getRoad(testVertsHrzLftToRight))
 // grid.addRoad(testVertsHrzLftToRight)
-
+/*
 let road2 = new Road("right", -10, 0)
 scene.add(road2.getRoad())
 let road3 = new Road("right", -10, -7)
@@ -53,7 +53,7 @@ let road7 = new Road("right", -7, -10)
 scene.add(road7.getRoad())
 let road8 = new Road("left", -0, -10)
 scene.add(road8.getRoad())
-
+*/
 
 // scene.add(road9.getRoad())
 

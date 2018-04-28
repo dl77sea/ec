@@ -33,10 +33,10 @@ class Grid {
     // this.gridNumCells = 8
     // this.gridCellDist = 10
 
-    this.testMap = []
+    this.map = []
 
-    for (let i = 0; i < this.gridNumCells*2 * this.gridNumCells*2; i++) {
-      this.testMap.push({
+    for (let i = 0; i < this.gridNumCells * 2 * this.gridNumCells * 2; i++) {
+      this.map.push({
         vrt: false,
         hrz: false,
         dgr: false,
@@ -46,6 +46,7 @@ class Grid {
       })
     }
 
+
     this.happened = 0
     // for(let i = 0; i < 5; i++) {
     //   this.map.push([])
@@ -54,7 +55,7 @@ class Grid {
     //   }
     // }
 
-    // console.log("snarfaloo", this.testMap)
+    // console.log("snarfaloo", this.map)
   }
 
   getLine(startPt, endPt) {
@@ -114,7 +115,7 @@ class Grid {
       // linejoin:  'round' //ignored by WebGLRenderer
     });
 
-    for (let i = -this.gridCellDist * this.gridNumCells / 2; i <= this.gridCellDist * this.gridNumCells / 2; i += this.gridCellDist/divisions) {
+    for (let i = -this.gridCellDist * this.gridNumCells / 2; i <= this.gridCellDist * this.gridNumCells / 2; i += this.gridCellDist / divisions) {
       //build horizontal line
       let startPt = {
         x: -this.gridCellDist * this.gridNumCells / 2,
@@ -168,10 +169,10 @@ class Grid {
   // ]
 
   addRoad(verts) {
-    console.log("---num of segs:", verts.length/3)
+    console.log("---num of segs:", verts.length / 3 - 1)
     //process each segment in road
     let numVerts = verts.length / 3 - 1
-
+    console.log("this.map: ", this.map)
     for (let i = 0; i < verts.length - 3; i += 3) {
 
       let transOffset = this.gridCellDist * this.gridNumCells / 2
@@ -193,120 +194,37 @@ class Grid {
 
       console.log("transEndX x: ", transEndX)
       console.log("transEndY y: ", transEndY)
-
-
-      // console.log("end x: ", verts[i + 3])
-      // console.log("end y: ", verts[i + 4])
-      // console.log("end z: ", verts[i + 5])
-      //
+      console.log("--")
 
       // this gets the x,y coordinates onto the grid (translated into grid space with origin at lower left corner)
-      let iX = (transStartX / this.gridCellDist) - 1
-      let iY = this.gridNumCells - (transStartY / this.gridCellDist) - 1
-      console.log("iX, iY: ", iX, iY)
-      /*
-      //vertical
-      if (transStartX === transEndX) {
-        //transformed x * y / units: use transformed x and y of vertex to determin array position
-
-        if (transStartY > transEndY) {
-          //seg is going top to bottom
-          this.testMap[((iY + 1) * this.gridNumCells) + iX].vrt = true
-          this.testMap[((iY + 1) * this.gridNumCells) + iX + this.gridNumCells].vrt = true
-        } else {
-          //seg is going bottom to top
-          console.log("+++", iX, iY)
-          this.testMap[(iY * this.gridNumCells) + iX].vrt = true
-          this.testMap[(iY * this.gridNumCells) + iX - this.gridNumCells].vrt = true
-        }
-      }
-      //horizontal
-      if (transStartY === transEndY) {
-        //seg is going right to left
-        if (transStartX > transEndX) {
-          this.testMap[(iY * this.gridNumCells) + iX + this.gridNumCells - 1].hrz = true
-          this.testMap[(iY * this.gridNumCells) + iX + 1 + this.gridNumCells - 1].hrz = true
-        } else {
-          //seg is going left to right
-          this.testMap[(iY * this.gridNumCells) + iX + 1 + this.gridNumCells].hrz = true
-          this.testMap[(iY * this.gridNumCells) + iX + 1 + 1 + this.gridNumCells].hrz = true
-        }
-
-      }
-      //diagonal
-      if (transStartX !== transEndX && transStartY !== transEndY) {
-
-        //diagonal up and right
-        if (transEndX > transStartX) {
-          this.happened += 1
-          //go one over to right from index,
-          //then subtract gridNumCells
-          //to mark cell representing upper part of diagonal
-          this.testMap[(iY * this.gridNumCells) + iX + 1].dgr = true
-          this.testMap[(iY * this.gridNumCells) + iX + 1 - this.gridNumCells + 1].dgr = true
-        } else {
-          //diagonal up and left
-          this.testMap[(iY * this.gridNumCells) + iX].dgl = true
-          this.testMap[(iY * this.gridNumCells) + iX - this.gridNumCells - 1].dgl = true
-        }
-      }
-      */
-    }
-    /*
-    for (let vertCounter = 0; vertCounter < numVerts; vertCounter++) {
-      console.log("i: ", i)
-      console.log("start x:", verts[i + 0])
-      console.log("start y:", verts[i + 1])
-      console.log("start z:", verts[i + 2])
-      console.log("end x:", verts[i + 3])
-      console.log("end y:", verts[i + 4])
-      console.log("end z:", verts[i + 5])
-
-      //translate (test) verts to testMap segment representation:
-      let transOffset = this.gridCellDist * this.gridNumCells / 2
-      let transStartX = verts[i + 0] + transOffset
-      let transStartY = verts[i + 1] + transOffset
-
-      let transEndX = verts[i + 3] + transOffset
-      let transEndY = verts[i + 4] + transOffset
-      console.log("verts: ", verts)
-      console.log("transStartX, transStartY, transEndX, transEndY:", transStartX, transStartY, transEndX, transEndY)
-      i += 3
-
-      //for each segment, update cell values in map array...
-      let iX = (transStartX / this.gridCellDist) - 1
-      let iY = (this.gridNumCells * this.gridNumCells) - ((transStartY / this.gridCellDist) * this.gridNumCells) - this.gridNumCells
+      let iX = (transStartX / (this.gridCellDist / 2)) - 1
+      let iY = (this.gridNumCells * 2) - (transStartY / (this.gridCellDist / 2)) - 1
 
       //vertical
       if (transStartX === transEndX) {
-        //transformed x * y / units: use transformed x and y of vertex to determin array position
-        this.testMap[iY + iX - this.gridNumCells].vrt = true
-        this.testMap[iY + iX].vrt = true
+        this.map[(iY * this.gridNumCells * 2) + iX].vrt = true
       }
+
       //horizontal
       if (transStartY === transEndY) {
-        this.testMap[iY + iX + 1 + this.gridNumCells].hrz = true
-        this.testMap[iY + iX + 2 + this.gridNumCells].hrz = true
+        iX++
+        this.map[(iY * this.gridNumCells * 2) + iX].hrz = true
       }
+
       //diagonal
       if (transStartX !== transEndX && transStartY !== transEndY) {
-
-        //diagonal up and right
+        iX++
         if (transEndX > transStartX) {
-          this.happened += 1
-          //go one over to right from index,
-          //then subtract gridNumCells
-          //to mark cell representing upper part of diagonal
-          this.testMap[iY + iX + 1].dgr = true
-          this.testMap[iY + iX - this.gridNumCells + 2].dgr = true
+          //diagonal up and right
+          this.map[(iY * this.gridNumCells * 2) + iX].dgr = true
         } else {
           //diagonal up and left
-          this.testMap[iY + iX - this.gridNumCells - 1].dgl = true
-          this.testMap[iY + iX].dgl = true
+          this.map[(iY * this.gridNumCells * 2) + iX].dgl = true
         }
       }
+
     }
-    */
+    console.log(this.map)
   }
 
   plotDot(cenX, cenY, color) {
@@ -412,11 +330,11 @@ class Grid {
             this.plotDot(x - 2.5, y - 2.5, tileRefs.ur[orientationMode])
             grid[i].orientationMode = orientationMode
             //set new orientation mode to match what's happening in this area
-            if(grid[i].hrz) {
+            if (grid[i].hrz) {
               orientationMode = getOppositeOrientationMode(grid[i - this.gridNumCells].orientationMode)
             } else {
-              if(i > 7) {
-                orientationMode = grid[i-this.gridNumCells].orientationMode
+              if (i > 7) {
+                orientationMode = grid[i - this.gridNumCells].orientationMode
               } else {
                 changeOrientationMode()
               }
