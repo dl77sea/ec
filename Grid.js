@@ -219,11 +219,12 @@ class Grid {
           this.map[(iY * this.gridNumCells * 2) + iX].dgr = true
         } else {
           //diagonal up and left
-          this.map[(iY * this.gridNumCells * 2) + iX].dgl = true
+          this.map[(iY * this.gridNumCells * 2) + iX-1].dgl = true
         }
       }
 
     }
+
     console.log(this.map)
   }
 

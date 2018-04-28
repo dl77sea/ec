@@ -27,35 +27,42 @@ for(line of gridLinesSuper) {
 
 //direction, gridCellX, gridCellY, edge
 let road1 = new Road("right", -10, 7)
-
-// let road1Verts = road1.get()
-scene.add(road1.getRoad())
-console.log(road1.verts)
+scene.add(road1.get3jsRoad())
 grid.addRoad(road1.verts)
 
-
-// scene.add(road9.getRoad(testVertsHrzLftToRight))
-// grid.addRoad(testVertsHrzLftToRight)
-/*
 let road2 = new Road("right", -10, 0)
-scene.add(road2.getRoad())
+scene.add(road2.get3jsRoad())
+grid.addRoad(road2.verts)
+
 let road3 = new Road("right", -10, -7)
-scene.add(road3.getRoad())
+scene.add(road3.get3jsRoad())
+grid.addRoad(road3.verts)
 
 let road4 = new Road("left", 10, 7)
-scene.add(road4.getRoad())
+scene.add(road4.get3jsRoad())
+grid.addRoad(road4.verts)
+
 let road5 = new Road("left", 10, 0)
-scene.add(road5.getRoad())
+scene.add(road5.get3jsRoad())
+grid.addRoad(road5.verts)
+
 let road6 = new Road("left", 10, -7)
-scene.add(road6.getRoad())
+scene.add(road6.get3jsRoad())
+grid.addRoad(road6.verts)
 
 let road7 = new Road("right", -7, -10)
-scene.add(road7.getRoad())
-let road8 = new Road("left", -0, -10)
-scene.add(road8.getRoad())
-*/
+scene.add(road7.get3jsRoad())
+grid.addRoad(road7.verts)
 
-// scene.add(road9.getRoad())
+let road8 = new Road("left", -0, -10)
+scene.add(road8.get3jsRoad())
+grid.addRoad(road8.verts)
+
+
+// scene.add(road9.get3jsRoad())
+
+// scene.add(road9.get3jsRoad(testVertsHrzLftToRight))
+// grid.addRoad(testVertsHrzLftToRight)
 
 
 //  build grid (80x80) array to help track transitions in hw network
@@ -177,35 +184,35 @@ let testVertsVrtBtmToTop = [
 ]
 
 //horizontal left to right
-scene.add(road9.getRoad(testVertsHrzLftToRight))
+scene.add(road9.get3jsRoad(testVertsHrzLftToRight))
 grid.addRoad(testVertsHrzLftToRight)
 
 //horizontal right to left
-scene.add(road9.getRoad(testVertsHrzRightToLft))
+scene.add(road9.get3jsRoad(testVertsHrzRightToLft))
 grid.addRoad(testVertsHrzRightToLft)
 
 //diagonal left
-scene.add(road9.getRoad(testVertsDgnLft))
+scene.add(road9.get3jsRoad(testVertsDgnLft))
 grid.addRoad(testVertsDgnLft)
 
 //diagonal right
-scene.add(road9.getRoad(testVertsDgnRight))
+scene.add(road9.get3jsRoad(testVertsDgnRight))
 grid.addRoad(testVertsDgnRight)
 
 //does not work
 //vertical top to bottom
-scene.add(road9.getRoad(testVertsVrtTopToBtm))
+scene.add(road9.get3jsRoad(testVertsVrtTopToBtm))
 grid.addRoad(testVertsVrtTopToBtm)
 
 //works
 //vertical bottom to top
-scene.add(road9.getRoad(testVertsVrtBtmToTop))
+scene.add(road9.get3jsRoad(testVertsVrtBtmToTop))
 grid.addRoad(testVertsVrtBtmToTop)
 
 
-scene.add(road9.getRoad(testVertsRoad1))
-scene.add(road9.getRoad(testVertsRoad2))
-// scene.add(road9.getRoad(testVertsRoad2b))
+scene.add(road9.get3jsRoad(testVertsRoad1))
+scene.add(road9.get3jsRoad(testVertsRoad2))
+// scene.add(road9.get3jsRoad(testVertsRoad2b))
 grid.addRoad(testVertsRoad1)
 grid.addRoad(testVertsRoad2)
 // grid.addRoad(testVertsRoad2b)

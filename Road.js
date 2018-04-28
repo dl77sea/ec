@@ -214,7 +214,7 @@ class Road {
     return verts
   }
 
-  getRoad(verts = this.genRoad()) {
+  get3jsRoad(verts = this.genRoad()) {
     this.verts = verts
     let verts32 = new Float32Array(verts)
     let geom = new THREE.BufferGeometry()
