@@ -26,6 +26,7 @@ for(line of gridLinesSuper) {
 }
 
 //direction, gridCellX, gridCellY, edge
+
 let road1 = new Road("right", -10, 7)
 scene.add(road1.get3jsRoad())
 grid.addRoad(road1.verts)

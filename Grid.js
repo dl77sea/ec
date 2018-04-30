@@ -104,6 +104,7 @@ class Grid {
     // console.log("---num of segs:", verts.length / 3 - 1)
     //process each segment in road
     let numVerts = verts.length / 3 - 1
+    console.log(verts)
     // console.log("this.map: ", this.map)
     for (let i = 0; i < verts.length - 3; i += 3) {
 
@@ -114,19 +115,20 @@ class Grid {
 
       let transEndX = verts[i + 3] + transOffset
       let transEndY = verts[i + 4] + transOffset
-      /*
+
       console.log("transStartX x: ", transStartX)
       console.log("transStartY y: ", transStartY)
 
       console.log("transEndX x: ", transEndX)
       console.log("transEndY y: ", transEndY)
       console.log("--")
-      */
+
 
       // this gets the x,y coordinates onto the grid (translated into grid space with origin at lower left corner)
-      let iX = (transStartX / (this.gridCellDist / 2)) - 1
+      let iX = (transStartX / (this.gridCellDist / 2))
+      if (iX !== 0) iX--
       let iY = (this.gridNumCells * 2) - (transStartY / (this.gridCellDist / 2)) - 1
-
+      console.log(iX, iY)
       //vertical
       if (transStartX === transEndX) {
         this.map[(iY * this.gridNumCells * 2) + iX].vrt = true
@@ -135,9 +137,7 @@ class Grid {
       //fix this (200 and 0 are not showing correctly, only 160 is)
       //horizontal
       if (transStartY === transEndY) {
-        // iX++
         this.map[(iY * this.gridNumCells * 2) + iX].hrz = true
-        this.map[(iY * this.gridNumCells * 2) + iX].transStartX = transStartX
         // this.map[(iY * this.gridNumCells * 2) + iX].endX = transEndX
       }
 
@@ -173,7 +173,7 @@ class Grid {
       if (i % this.gridNumCells * 2 !== 0) {
         if (this.map[i - 1].vrt) {
           this.orientationMode = this.getOppositeOrientationMode(this.map[i - 1].quad3)
-          // this.plotDot(i)
+          this.plotDot(i)
         } else {
           this.orientationMode = this.map[i - 1].orientationMode
         }
@@ -187,7 +187,7 @@ class Grid {
           // console.log("ok: ", i)
           if (this.map[i - (this.gridNumCells * 2)].hrz) {
 
-            console.log((i - (this.gridNumCells * 2)))
+            // console.log((i - (this.gridNumCells * 2)))
             this.orientationMode = this.getOppositeOrientationMode(this.map[i - this.gridNumCells * 2].quad4)
             // if((i - (this.gridNumCells * 2))===160)
             this.plotDot(i)
@@ -273,7 +273,7 @@ class Grid {
 
 
 
-    console.log(cenX, cenY)
+    // console.log(cenX, cenY)
     //translate into 3js coordinates
 
     cenX = cenX - (this.gridNumCells) * this.gridCellDist / 2
