@@ -58,7 +58,12 @@ let road8 = new Road("left", -0, -10)
 scene.add(road8.get3jsRoad())
 grid.addRoad(road8.verts)
 
+let road9 = new Road("left", 7, -10)
+scene.add(road9.get3jsRoad())
+grid.addRoad(road9.verts)
 
+grid.assignOrientation()
+grid.plotDotAt(0,100)
 // scene.add(road9.get3jsRoad())
 
 // scene.add(road9.get3jsRoad(testVertsHrzLftToRight))
