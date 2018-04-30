@@ -122,6 +122,7 @@ class Grid {
       console.log("transEndY y: ", transEndY)
       console.log("--")
       */
+
       // this gets the x,y coordinates onto the grid (translated into grid space with origin at lower left corner)
       let iX = (transStartX / (this.gridCellDist / 2)) - 1
       let iY = (this.gridNumCells * 2) - (transStartY / (this.gridCellDist / 2)) - 1
@@ -131,10 +132,13 @@ class Grid {
         this.map[(iY * this.gridNumCells * 2) + iX].vrt = true
       }
 
+      //fix this (200 and 0 are not showing correctly, only 160 is)
       //horizontal
       if (transStartY === transEndY) {
-        iX++
+        // iX++
         this.map[(iY * this.gridNumCells * 2) + iX].hrz = true
+        this.map[(iY * this.gridNumCells * 2) + iX].transStartX = transStartX
+        // this.map[(iY * this.gridNumCells * 2) + iX].endX = transEndX
       }
 
       //diagonal
@@ -169,14 +173,9 @@ class Grid {
       if (i % this.gridNumCells * 2 !== 0) {
         if (this.map[i - 1].vrt) {
           this.orientationMode = this.getOppositeOrientationMode(this.map[i - 1].quad3)
-          // console.log(this.map[i - 1])
-          this.happened += 1
-          // if (this.happened === 3) {
-          this.plotDot(i)
-          // }
-        } else {
-          this.orientationMode = this.map[i - 1].quad3
           // this.plotDot(i)
+        } else {
+          this.orientationMode = this.map[i - 1].orientationMode
         }
       } else
 
@@ -184,11 +183,18 @@ class Grid {
         //  get value from above (quad4), if not on first row, but are in first grid square,
         //  and change orientation mode if hrz segment found adjacent above,
         //  else use value from quad4 above
-        if (i > this.gridNumCells * 2 && i % this.gridNumCells * 2 === 0) {
-          if (this.map[i - this.gridNumCells * 2].hrz) {
+        if (i >= this.gridNumCells * 2 && i%(this.gridNumCells*2) === 0) {
+          // console.log("ok: ", i)
+          if (this.map[i - (this.gridNumCells * 2)].hrz) {
+
+            console.log((i - (this.gridNumCells * 2)))
             this.orientationMode = this.getOppositeOrientationMode(this.map[i - this.gridNumCells * 2].quad4)
+            // if((i - (this.gridNumCells * 2))===160)
+            this.plotDot(i)
           } else {
             this.orientationMode = this.map[i - this.gridNumCells * 2].quad4
+            // console.log("snarffus")
+            // this.plotDot(i)
           }
         } else {
           //  quad2 is not in first grid square of row other than first, so check for diagonal left segment,
